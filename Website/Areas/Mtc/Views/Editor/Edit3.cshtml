@@ -1,0 +1,13 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Matches.MatchEditorViewModel
+
+@{ ViewBag.Title = "Edit match (Page 3):"; }
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-6 col-lg-offset-3">
+        @Html.EditorForModel("Editor3")
+    </div>
+</div>
+
+@Html.SelectTab("edit")

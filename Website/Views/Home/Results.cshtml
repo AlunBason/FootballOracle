@@ -1,0 +1,16 @@
+﻿@model FootballOracle.Models.ViewModels.Standard.HomeViewModel
+
+
+@{
+    ViewBag.Title = "Results";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var item in Model.SearchResults)
+        {
+            item.IsParentDisplayed = true;
+            @Html.DisplayFor(m => item, "ISearchResult")
+        }
+    </div>
+</div>

@@ -1,0 +1,17 @@
+﻿@model Boolean
+
+<div class="form-group">
+    <div class="col-lg-offset-3 col-lg-9">
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(m => m)
+
+                @if (!ViewData.ModelMetadata.AdditionalValues.Any(a => a.Key == "HideLabel"))
+                {
+                    @Html.LabelForModel()
+                }
+                
+            </label>
+        </div>
+    </div>
+</div>

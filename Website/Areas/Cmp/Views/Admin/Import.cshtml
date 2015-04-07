@@ -1,0 +1,35 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionImportViewModel
+@{
+    ViewBag.Title = "Import";
+}
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-group-sm">
+            <a class="btn btn-sm btn-primary" href="@Url.Action("Import")">Import from ESPN</a>
+            <a class="btn btn-sm btn-default" href="@Url.Action("MatchValidation")">Match validation</a>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        @Html.EditorFor(m => m.ImportCampaignViewModel)
+    </div>
+</div>
+
+@Html.SelectTab("admin")
+
+
+
+
+
+
+
+
+
+
+

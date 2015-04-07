@@ -1,0 +1,68 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Teams.TeamManageLookupsViewModel
+
+@{
+    ViewBag.Title = "Manage team lookups:";
+}
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Summary")">Team summary</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Edit")">Edit team</a>
+
+            @if (Model.IsAdmin)
+            {
+                <a class="btn btn-primary btn-xs" href="@Url.Action("ManageLookups")">Manage lookups</a>
+            }
+        </p>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="well">
+            <form method="post" class="form-horizontal">
+                <fieldset>
+                    <legend>@ViewBag.Title</legend>
+
+                    @Html.AntiForgeryToken()
+
+                    @Html.HiddenFor(m => m.PrimaryKey)
+                    @Html.ValidationSummary(false, string.Empty, new { @class = "alert alert-danger" })
+
+                    <table class="table table-condensed table-striped small">
+                        <thead>
+                            <tr>
+                                <th>Site</th>
+                                <th>Lookup</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @{var viewModelCount = Model.LookupTeamViewModels.Count(); }
+
+                            @for (int i = 0; i < viewModelCount; i++)
+                            {
+                                <tr>
+                                    @Html.HiddenFor(m => m.LookupTeamViewModels[i].PrimaryKey)
+                                    @Html.HiddenFor(m => m.LookupTeamViewModels[i].TeamGuid)
+
+                                    <td>@Html.EditorFor(m => m.LookupTeamViewModels[i].ImportSite)</td>
+                                    <td>@Html.EditorFor(m => m.LookupTeamViewModels[i].LookupId)</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.Partial("_SubmitButtons")
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+@Html.SelectTab("edit")

@@ -1,0 +1,17 @@
+﻿@model IList<FootballOracle.Foundation.ViewModels.BreadcrumbViewModel>
+
+<ol class="breadcrumb small">
+
+    @foreach (var item in Model)
+    {
+        if (item != Model.Last())
+        {
+            <li>@Html.ActionLink(item.Description, "Index", "Details", new { @area = item.Area.ToString(), hk = item.Hk }, new { Title = item.Tooltip })</li>
+        }
+        else
+        {
+            <li class="active">@item.Description</li>
+        }
+    }
+</ol>
+

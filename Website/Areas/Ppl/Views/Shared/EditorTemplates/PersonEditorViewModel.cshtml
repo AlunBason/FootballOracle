@@ -1,0 +1,30 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.People.PersonEditorViewModel
+
+<div class="well">
+    <form method="post" class="form-horizontal">
+        <fieldset>
+            <legend>@ViewBag.Title</legend>
+
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(false, string.Empty, new { @class = "alert alert-danger" })
+
+            @Html.EditorFor(m => m.Forenames)
+            @Html.EditorFor(m => m.Surname)
+            @Html.EditorFor(m => m.DateOfBirth)
+            @Html.EditorFor(m => m.DateOfDeath)
+            @Html.EditorFor(m => m.CountryGuid)
+            @Html.EditorFor(m => m.Height)
+            @Html.EditorFor(m => m.WebAddress)
+            @Html.EditorFor(m => m.EffectiveFrom)
+
+            @Html.HiddenFor(m => m.PrimaryKey)
+            @Html.HiddenFor(m => m.HeaderKey)
+            @Html.HiddenFor(m => m.ViewDate)
+            @Html.HiddenFor(m => m.EffectiveTo)
+
+            @Html.Partial("_SubmitButtons")
+
+        </fieldset>
+    </form>
+</div>

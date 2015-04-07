@@ -1,0 +1,11 @@
+﻿@model PositionType?
+
+@(Html.Kendo().DropDownListFor(m => m)
+    .OptionLabel("--Select--")
+    .HtmlAttributes(new { style = "width:150px" })
+    .DataTextField("Description")
+    .DataValueField("Code")
+    .BindTo(EnumCodePicker.Of<PositionType>())
+    .Value(Model != null ? ((int)Model).ToString() : null)
+)
+

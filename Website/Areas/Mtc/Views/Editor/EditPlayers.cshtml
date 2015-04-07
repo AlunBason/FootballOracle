@@ -1,0 +1,140 @@
+﻿@using Kendo.Mvc.UI
+@using FootballOracle.Foundation
+
+@model FootballOracle.Models.ViewModels.Approvable.Matches.MatchPlayersEditorViewModel
+
+@{
+    ViewBag.Title = "Edit players";
+    var tm = ViewContext.RouteData.Values["tm"].ToString();
+}
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Home")">Match summary</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Edit")">Match details</a>
+            <a class="@(tm == "1" ? "btn btn-primary btn-xs" : "btn btn-default btn-xs")" href="@Url.Action("EditPlayers", new { tm = 1 })">@string.Format("{0} players", Model.Team1ViewModel.ToString())</a>
+            <a class="@(tm == "2" ? "btn btn-primary btn-xs" : "btn btn-default btn-xs")" href="@Url.Action("EditPlayers", new { tm = 2 })">@string.Format("{0} players", Model.Team2ViewModel.ToString())</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("EditEvents")">Match events</a>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+
+        <div class="h4">Select players:</div>
+
+        <form method="post" class="form-horizontal">
+            <fieldset>
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(m => m.PrimaryKey)
+                @Html.HiddenFor(m => m.HeaderKey)
+                @Html.HiddenFor(m => m.ViewDate)
+                @Html.HiddenFor(m => m.TeamNumber)
+
+                <div>
+                    <table class="table table-condensed table-striped small">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Position</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @for (int i = 0; i < Model.MatchPersonViewModels.Count(); i++)
+                            {
+                                <tr>
+                                    @Html.HiddenFor(m => m.MatchPersonViewModels[i].PersonGuid)
+
+                                    <td style="vertical-align: middle;">@Html.DisplayFor(m => m.MatchPersonViewModels[i].PersonName)</td>
+
+                                    <td>@Html.EditorFor(m => m.MatchPersonViewModels[i].PositionType)</td>
+
+                                    <td>@Html.EditorFor(m => m.MatchPersonViewModels[i].MatchEventStartType)</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <span>Submit changes</span>
+                    </button>
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="h4">Search for new players:</div>
+
+        <div class="text-center">
+
+            @(Html.Kendo().AutoComplete()
+            .Name("personAutoComplete")
+            .Filter("contains")
+            .MinLength(3)
+            .Suggest(false)
+            .HtmlAttributes(new { style = "width:300px" })
+            .Value(string.Empty)
+            .DataSource(source =>
+            {
+                source.Read(read =>
+                {
+                    read.Action("GetPersonAutoCompleteList", "Json", new { @area = string.Empty })
+                        .Data("personAutoCompleteAdditionalData");
+                })
+                .ServerFiltering(true);
+            })
+            .Events(e => e.Change("personAutoComplete_onChange"))
+            )
+
+        </div>
+
+        <div id="divPartial" />
+    </div>
+</div>
+
+@Html.SelectTab("edit")
+
+<script type="text/javascript">
+    function personAutoCompleteAdditionalData() {
+        return { text: $("#personAutoComplete").val() };
+    }
+
+    function personAutoComplete_onChange() {
+
+        var searchText = $("#personAutoComplete").val()
+
+        var options = {
+            url: '@Url.Action("PeopleSearch", "Partial", new { @area = string.Empty })',
+            type: 'get',
+            cache: 'false',
+            async: true,
+            data:
+            {
+                tx: searchText,
+                dt: '@Model.ViewDate.ToUrlString()',
+                tn: '@Model.TeamNumber',
+                id: '@Model.ShortPrimaryKey',
+                hd: '@Model.HeaderKey.ToShortGuid()'
+            },
+            success: function (result) {
+                $('#divPartial').html(result);
+            }
+        };
+
+        $.ajax(options);
+    }
+</script>

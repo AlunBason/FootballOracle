@@ -1,0 +1,44 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Matches.MatchEditorViewModel
+
+<br />
+
+<div class="well">
+    <form method="post" class="form-horizontal">
+        <fieldset>
+            <legend>@ViewBag.Title</legend>
+
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(false, string.Empty, new { @class = "alert alert-danger" })
+
+            @Html.HiddenFor(m => m.PrimaryKey)
+            @Html.HiddenFor(m => m.HeaderKey)
+            @Html.HiddenFor(m => m.ViewDate)
+            @Html.HiddenFor(m => m.CompetitionGuid)
+            @Html.HiddenFor(m => m.VenueGuid)
+            @Html.HiddenFor(m => m.Attendance)
+            @Html.HiddenFor(m => m.Team1Guid)
+            @Html.HiddenFor(m => m.Team1Ht)
+            @Html.HiddenFor(m => m.Team1Ft)
+            @Html.HiddenFor(m => m.Team2Guid)
+            @Html.HiddenFor(m => m.Team2Ht)
+            @Html.HiddenFor(m => m.Team2Ft)
+
+            @Html.EditorFor(m => m.MatchDate)
+
+            <div class="form-group">
+                <div class="col-md-12 text-right">
+
+                    <a class="btn btn-danger btn-sm" href="@Url.Action("Home")">
+                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-primary btn-sm" name="Command" value="Next">
+                        <span class="glyphicon glyphicon-chevron-right"></span> Next
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+

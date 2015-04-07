@@ -1,0 +1,26 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Matches.MatchEditorViewModel
+@{
+    ViewBag.Title = "Summary";
+}
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Home")">Match summary</a>
+            <a class="btn btn-primary btn-xs" href="@Url.Action("Edit")">Match details</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("EditPlayers", new { tm = 1 })">@string.Format("{0} players", Model.Team1ViewModel.ToString())</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("EditPlayers", new { tm = 2 })">@string.Format("{0} players", Model.Team2ViewModel.ToString())</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("EditEvents")">Match events</a>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-lg-offset-3">
+        @Html.EditorForModel("Editor")
+    </div>
+</div>
+
+@Html.SelectTab("edit")

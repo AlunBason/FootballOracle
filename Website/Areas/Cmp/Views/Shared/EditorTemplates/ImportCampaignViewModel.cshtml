@@ -1,0 +1,24 @@
+﻿@using Kendo.Mvc.UI
+
+@model FootballOracle.Models.ViewModels.Standard.Campaigns.ImportCampaignViewModel
+
+<div class="well">
+    <form method="post" class="form-horizontal">
+        <fieldset>
+            <legend>@ViewBag.Title</legend>
+
+            @Html.AntiForgeryToken()
+
+            @Html.EditorFor(m => m.IncludeFixtures)
+            @Html.EditorFor(m => m.IncludeResults)
+
+            @Html.HiddenFor(m => m.HeaderKey)
+            @Html.HiddenFor(m => m.ImportDate)
+
+            @Html.Partial("_SubmitButtons")
+
+            @Html.ValidationSummary(false, string.Empty, new { @class = "alert alert-danger" })
+
+        </fieldset>
+    </form>
+</div>

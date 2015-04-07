@@ -1,0 +1,24 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Countries.CountryEditorViewModel
+
+@{
+    ViewBag.Title = "Edit team:";
+}
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Summary")">Country summary</a>
+            <a class="btn btn-primary btn-xs" href="@Url.Action("Edit")">Edit country</a>
+        </p>
+
+        @Html.EditorForModel()
+    </div>
+
+    <div class="col-md-6">
+        @Html.Partial("EditableViewModels", Model.EditableViewModels)
+    </div>
+</div>
+
+@Html.SelectTab("edit")

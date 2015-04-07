@@ -1,0 +1,90 @@
+﻿@using FootballOracle.Foundation
+
+@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionPlayersViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' players", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+@if(Model.SelectedCampaignViewModel != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                    <tr class="success">
+                        <th class="text-center" colspan="2">Goals</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.GoalsEventTotals)
+                    {
+                        <tr>
+                            <td>@Html.DisplayTeamBadgeWithPersonLink(item.Person, Model.ViewDate, 20, 20, null)</td>
+                            <td class="text-center">@item.Count.ToString()</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                    <tr class="success">
+                        <th class="text-center" colspan="2">Yellow cards</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.BookedEventTotals)
+                    {
+                        <tr>
+                            <td>@Html.DisplayTeamBadgeWithPersonLink(item.Person, Model.ViewDate, 20, 20, null)</td>
+                            <td class="text-center">@item.Count.ToString()</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                    <tr class="success">
+                        <th class="text-center" colspan="2">Red cards</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.SentOffEventTotals)
+                    {
+                        <tr>
+                            <td>@Html.DisplayTeamBadgeWithPersonLink(item.Person, Model.ViewDate, 20, 20, null)</td>
+                            <td class="text-center">@item.Count.ToString()</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row col-md-12 alert alert-danger">
+        <span style="vertical-align: middle;">
+            @string.Format("No campaigns found for {0}.", @Model.ViewDate.ToShortDateString())
+        </span>
+        @Html.ActionLink("Set date to today", "Players", new { dt = string.Empty }, new { @class = "btn btn-xs btn-danger" })
+    </div>
+}
+
+@Html.SelectTab("players")
+

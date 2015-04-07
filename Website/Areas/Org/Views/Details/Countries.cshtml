@@ -1,0 +1,36 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Organisations.OrganisationCountriesViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' countries", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+
+        @if (Model.InitialLetters != null)
+        {
+            <div class="text-left">
+                <span>Select initial character: </span>
+                @foreach (var initialLetter in Model.InitialLetters)
+                {
+                    var classValue = initialLetter != Model.SelectedInitialLetter ? "btn btn-xs btn-default" : "btn btn-xs btn-primary";
+
+                    @Html.ActionLink(initialLetter.ToString(), "Countries", new { id = Model.ShortPrimaryKey, dt = Model.ViewDate.ToUrlString(), sl = initialLetter }, new { @class = classValue })
+                }
+            </div>
+
+            <br />
+        }
+
+        <dl>
+            @foreach (var item in Model.ChildCountryViewModels)
+            {
+                item.IsParentDisplayed = false;
+                @Html.DisplayFor(m => item, "ISearchResult");
+            }
+        </dl>
+    </div>
+</div>
+
+@Html.SelectTab("countries")
+

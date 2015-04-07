@@ -1,0 +1,31 @@
+﻿@model IEnumerable<FootballOracle.Models.ViewModels.Approvable.Matches.BaseMatchViewModel>
+
+@{
+    ViewBag.Title = "Unresolved matches";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-group-sm">
+            <a class="btn btn-sm btn-default" href="@Url.Action("DeleteAndImportFixtures")">Delete and import fixtures</a>
+            <a class="btn btn-sm btn-primary" href="@Url.Action("UnresolvedMatches")">Unresolved matches</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table>
+            @foreach (var matchViewModel in Model.OrderBy(o => o.MatchDate).ThenBy(t => t.Team1ViewModel.ToString()))
+            {
+                <tr>
+                    <td>@matchViewModel.MatchDate.ToDisplayString()</td>
+                    <td class="text-right">@Html.DisplayBadgeWithTeamLink(matchViewModel.Team1ViewModel.HeaderEntity, matchViewModel.MatchDate, 20, 20, null, true)</td>
+                    <td st class="text-center">v</td>
+                    <td>@Html.DisplayBadgeWithTeamLink(matchViewModel.Team2ViewModel.HeaderEntity, matchViewModel.MatchDate, 20, 20, null)</td>
+                    <td>@Html.ActionLink("Delete match", "DeleteMatch", new { hk = matchViewModel.HeaderKey.ToShortGuid() }, new { @class = "btn btn-xs btn-danger", onclick = "return confirm('Are you sure?');" })</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

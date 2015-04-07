@@ -1,0 +1,17 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Organisations.OrganisationVersionSummaryViewModel
+
+<div class="well">
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>@ViewBag.Title</legend>
+
+            @Html.EditorFor(m => m.OrganisationName)
+            @Html.EditorFor(m => m.OrganisationDescription)
+            @Html.EditorFor(m => m.ParentOrganisation)
+            @Html.EditorFor(m => m.Country)
+            @Html.EditorFor(m => m.WebAddress)
+            @Html.EditorFor(m => m.EffectiveFrom)
+
+        </fieldset>
+    </form>
+</div>

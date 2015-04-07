@@ -1,0 +1,164 @@
+﻿@using FootballOracle.Foundation
+@using FootballOracle.Foundation.Interfaces
+@using FootballOracle.Models.ViewModels.Approvable.People
+@using FootballOracle.Models.Entities
+
+@model FootballOracle.Models.ViewModels.Approvable.Matches.BaseMatchViewModel
+
+@Html.Partial("_Breadcrumbs", Model.Breadcrumbs)
+
+<div class="row col-md-12">
+    <span class="h5">
+        <small>Date: </small>@Model.MatchDate.ToDisplayString(true, true)
+    </span>
+</div>
+
+@if (Model.VersionEntity.CampaignStageKey != null)
+{
+    <div class="row col-md-12 text-left">
+        <span class="h5">
+            <small>Competition: </small>@Model.CompetitionViewModel.ToString()
+        </span>
+    </div>
+}
+
+@if (Model.VersionEntity.VenueGuid != null)
+{
+    <div class="row col-md-12">
+        <span class="h5">
+            <small>Venue: </small>@Html.ApprovalTypeLink(AreaType.Ven, Model.VenueViewModel.ToString(), Model.VenueViewModel.HeaderKey, Model.ViewDate, new { @class = "h5" })
+        </span>
+    </div>
+}
+
+@if (Model.VersionEntity.Attendance != null)
+{
+    <div class="row col-md-12">
+        <span class="h5">
+            <small>Attendance: </small>@string.Format("{0:#,#}", Model.VersionEntity.Attendance)
+        </span>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-5 text-right">@Html.DisplayBadgeWithTeamLink(Model.Team1ViewModel.VersionEntity.Team, Model.VersionEntity.MatchDate, 30, 30, new { @class = "h3 valign-middle" }, true)</div>
+    <div class="col-md-2 text-center"><span class="h3 valign-texttop">@string.Format("{0} : {1}", Model.VersionEntity.Team1FT, Model.VersionEntity.Team2FT)</span></div>
+    <div class="col-md-5">@Html.DisplayBadgeWithTeamLink(Model.Team2ViewModel.VersionEntity.Team, Model.ViewDate, 30, 30, new { @class = "h3 valign-middle" })</div>
+</div>
+
+<div class="row">
+    <div class="col-md-5 text-right">
+        @foreach (var item in Model.Team1Goals)
+        {
+            if (item.Entity.PersonPrimaryKey != null)
+            {
+                var personViewModel = item.PersonViewModel;
+
+                <div>
+                    @Html.ApprovalTypeLink(AreaType.Ppl, personViewModel.ToString(), personViewModel.HeaderKey)
+
+                    @if (item.Entity.MatchEventType == MatchEventType.OwnGoal)
+                    {
+                        if (item.Entity.Extra == null)
+                        {
+                            <span>@string.Format("(og {0})", item.Entity.Minute)</span>
+                        }
+                        else
+                        {
+                            <span>@string.Format("(og {0} +{1})", item.Entity.Minute, item.Entity.Extra)</span>
+                        }
+                    }
+
+                    @if (item.Entity.MatchEventType == MatchEventType.Scored)
+                    {
+                        if (item.Entity.Extra == null)
+                        {
+                            <span>@string.Format("({0})", item.Entity.Minute)</span>
+                        }
+                        else
+                        {
+                            <span>@string.Format("({0} +{1})", item.Entity.Minute, item.Entity.Extra)</span>
+                        }
+                    }
+                </div>
+            }
+        }
+    </div>
+
+    <div class="col-md-2">&nbsp;</div>
+
+    <div class="col-md-5">
+        @foreach (var item in Model.Team2Goals)
+        {
+            if (item.Entity.PersonPrimaryKey != null)
+            {
+                var personViewModel = item.PersonViewModel;
+
+                <div>
+                    @Html.ApprovalTypeLink(AreaType.Ppl, personViewModel.ToString(), personViewModel.HeaderKey)
+
+                    @if (item.Entity.MatchEventType == MatchEventType.OwnGoal)
+                    {
+                        if (item.Entity.Extra == null)
+                         {
+                            <span>@string.Format("(og {0})", item.Entity.Minute)</span>
+                         }
+                         else
+                         {
+                            <span>@string.Format("(og {0} +{1})", item.Entity.Minute, item.Entity.Extra)</span>
+                         }
+                    }
+                    
+                    @if (item.Entity.MatchEventType == MatchEventType.Scored)
+                    {
+                        if (item.Entity.Extra == null)
+                        {
+                            <span>@string.Format("({0})", item.Entity.Minute)</span>
+                        }
+                        else
+                        {
+                            <span>@string.Format("({0} +{1})", item.Entity.Minute, item.Entity.Extra)</span>
+                        }
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+            <li id="summary">
+                <a href="@Url.Action("Summary", "Details")">Summary</a>
+            </li>
+
+            <li id="headtohead">
+                <a href="@Url.Action("HeadToHead", "Details")">Head to head</a>
+            </li>
+
+            @if (Model.Team1Ft == null && Model.Team2Ft == null)
+            {
+                <li id="predictor">
+                    <a href="@Url.Action("Predictor", "Details")">Predictor</a>
+                </li>
+            }
+
+            <li id="progress">
+                <a href="@Url.Action("Progress", "Details")">Progress</a>
+            </li>
+
+            <li id="edit">
+                <a href="@Url.Action("Home", "Editor", new { pk = Model.ShortPrimaryKey })">Edit</a>
+            </li>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <li id="import">
+                    @Html.ActionLink("Import", "Import", "Details")
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<br />

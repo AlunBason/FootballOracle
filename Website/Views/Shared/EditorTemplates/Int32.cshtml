@@ -1,0 +1,30 @@
+﻿@using Kendo.Mvc.UI
+
+@model int?
+
+<div class="row form-group">
+    <div class="col-md-12">
+        @if (!ViewData.ModelMetadata.AdditionalValues.Any(a => a.Key == "HideLabel"))
+        {
+            @Html.LabelForModel(new { @class = "control-label" })
+        }
+        <div>
+            @if (!ViewData.ModelMetadata.IsReadOnly)
+            {
+                @(Html.Kendo().IntegerTextBoxFor(m => m)
+                .Decimals(0)
+                .Format("n0")
+                .Min(int.MinValue)
+                .Max(int.MaxValue)
+                .Spinners(true)
+                .Enable(!ViewData.ModelMetadata.IsReadOnly)
+                .HtmlAttributes(new { @style = "width:160px" })
+                )
+            }
+            else
+            {
+                <div class="form-control-static">@Model</div>
+            }
+        </div>
+    </div>
+</div>

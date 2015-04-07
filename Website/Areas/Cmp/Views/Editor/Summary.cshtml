@@ -1,0 +1,32 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionVersionSummaryViewModel
+
+@{
+    ViewBag.Title = "Competition summary:";
+}
+
+@Html.DisplayForModel()
+
+@Html.Partial("_SaveChangesMessageType")
+
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            <a class="btn btn-primary btn-xs" href="@Url.Action("Summary")">Competition summary</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Edit")">Edit competition</a>
+
+            @if (Model.IsAdmin)
+            {
+                <a class="btn btn-default btn-xs" href="@Url.Action("ManageLookups")">Manage lookups</a>
+                <a class="btn btn-default btn-xs" href="@Url.Action("ManageCampaigns")">Manage campaigns</a>
+            }
+        </p>
+
+        @Html.EditorForModel()
+    </div>
+
+    <div class="col-md-6">
+        @Html.Partial("EditableViewModels", Model.EditableViewModels)
+    </div>
+</div>
+
+@Html.SelectTab("edit")

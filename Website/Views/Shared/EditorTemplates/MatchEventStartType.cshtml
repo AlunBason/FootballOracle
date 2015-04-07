@@ -1,0 +1,11 @@
+﻿@model MatchEventStartType?
+
+@(Html.Kendo().DropDownListFor(m => m)
+    .OptionLabel("Not selected")
+    .HtmlAttributes(new { style = "width:150px" })
+    .DataTextField("Description")
+    .DataValueField("Code")
+    .BindTo(EnumCodePicker.Of<MatchEventStartType>())
+    .Value(Model != null ? ((int)Model).ToString() : null)
+)
+

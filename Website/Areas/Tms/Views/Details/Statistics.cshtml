@@ -1,0 +1,25 @@
+﻿
+@model FootballOracle.Models.ViewModels.Approvable.Teams.TeamStatisticsViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' statistics", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+<div class="row">
+
+    <div class="col-md-12">
+        <ul class="list-group">
+
+            @foreach (var item in Model.TeamStatistics)
+            {
+                var classValue = item.DisplayType == FootballOracle.Foundation.DisplayType.Success ? "list-group-item-success" : "list-group-item-danger";
+                
+                <li class="list-group-item @classValue">@item.Description</li>
+            }
+
+        </ul>
+    </div>
+
+</div>
+
+@Html.SelectTab("statistics")

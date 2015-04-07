@@ -1,0 +1,22 @@
+﻿@model DateTime?
+
+<div class="row form-group">
+    <div class="col-md-12">
+        @if (!ViewData.ModelMetadata.AdditionalValues.Any(a => a.Key == "HideLabel"))
+        {
+            @Html.LabelForModel(new { @class = "control-label" })
+        }
+        <div>
+            @if (!ViewData.ModelMetadata.IsReadOnly)
+            {
+                @Html.Kendo().DatePickerFor(m => m).Min(Date.LowDate).Max(Date.HighDate).Format("dd/MM/yyyy").HtmlAttributes(new { @style = "width:180px;" })
+            }
+            else
+            {
+                var dateValue = Model != null ? ((DateTime)Model).ToDisplayString() : string.Empty;
+
+                <p class="form-control-static text-bigger">@dateValue</p>
+            }
+        </div>
+    </div>
+</div>

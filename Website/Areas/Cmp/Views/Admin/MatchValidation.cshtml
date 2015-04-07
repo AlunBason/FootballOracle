@@ -1,0 +1,59 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionMatchValidationViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' validation", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-group-sm">
+            <a class="btn btn-sm btn-default" href="@Url.Action("Import")">Import from ESPN</a>
+            <a class="btn btn-sm btn-primary" href="@Url.Action("MatchValidation")">Match validation</a>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <br />
+        <div class="well">
+            <form method="post" class="form-horizontal">
+                <fieldset>
+                    <legend>@ViewBag.Title</legend>
+
+                    @Html.AntiForgeryToken()
+
+                    @Html.HiddenFor(m => m.PrimaryKey)
+                    @Html.HiddenFor(m => m.HeaderKey)
+                    @Html.HiddenFor(m => m.ViewDate)
+
+                    @if (Model.MatchesWithoutVenues.Any())
+                    {
+                        @Html.EditorFor(m => m.FixMatchesWithoutVenues)
+                    }
+                    
+                    @if (Model.MatchDatesWithoutEvents.Any())
+                    {
+                        @Html.EditorFor(m => m.FixMatchesWithoutEvents)
+                    }
+
+                    @Html.Partial("_SubmitButtons")
+
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <br />
+        @if (Model.MatchesWithoutVenues.Any())
+        {
+            @Html.Raw(string.Format("Matches without venues: {0}", Model.MatchesWithoutVenues.Count()))
+        }
+        
+        @if (Model.MatchDatesWithoutEvents.Any())
+        {
+            @Html.Raw(string.Format("Match dates without events: {0}", Model.MatchDatesWithoutEvents.Count()))
+        }
+    </div>
+</div>
+
+@Html.SelectTab("admin")

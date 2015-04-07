@@ -1,0 +1,41 @@
+﻿@using FootballOracle.Foundation
+
+@model FootballOracle.Models.ViewModels.Approvable.Matches.MatchHeadToHeadViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' head to head", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped table-condensed table-hover small">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Competition</th>
+                    <th>Venue</th>
+                    <th class ="text-right">Home team</th>
+                    <th class="text-center">Score</th>
+                    <th>Away team</th>
+                    <th class="text-right">Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var match in Model.HeadToHeadMatchViewModels)
+                {
+                    <tr>
+                        <td>@match.MatchDate.ToDisplayString(true)</td>
+                        <td>@match.CompetitionViewModel.ToString()</td>
+                        <td>@Html.ApprovalTypeLink(AreaType.Ven, match.VenueViewModel.ToString(), match.VenueViewModel.HeaderKey)</td>
+                        <td class="text-right">@Html.DisplayBadgeWithTeamLink(match.VersionEntity.Team1, match.MatchDate, 20, 20, null, true)</td>
+                        <td class="text-center">@Html.ApprovalTypeLink(AreaType.Mtc, string.Format("{0} : {1}", match.VersionEntity.Team1FT, match.VersionEntity.Team2FT), match.HeaderKey)</td>
+                        <td>@Html.DisplayBadgeWithTeamLink(match.VersionEntity.Team2, match.MatchDate, 20, 20, null)</td>
+                        <td class="text-right">@string.Format("{0:#,##0}", match.VersionEntity.Attendance)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@Html.SelectTab("headtohead")

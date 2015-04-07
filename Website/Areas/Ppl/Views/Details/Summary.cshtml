@@ -1,0 +1,241 @@
+﻿@using FootballOracle.Models.Entities
+@using FootballOracle.Foundation.Interfaces
+@using FootballOracle.Models.ViewModels.Approvable.Teams
+@using FootballOracle.Foundation
+@using FootballOracle.Models.ViewModels.Approvable.Venues
+
+@model FootballOracle.Models.ViewModels.Approvable.People.PersonSummaryViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' summary", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-8">
+
+                @if (Model.SelectedLeagueCampaignViewModel != null)
+                {
+                    <h4>@string.Format("Selected season: {0}", Model.SelectedLeagueCampaignViewModel.ToString())</h4>
+
+                    foreach (var teamGroup in Model.SelectedMatchEvents.GroupBy(c => c.TeamViewModel.PrimaryKey))
+                    {
+                        <table class="table table-striped table-condensed table-hover">
+                            <thead>
+                                <tr class="success">
+                                    <th class="success" colspan="9">@Html.DisplayBadgeWithTeamLink(teamGroup.First().TeamViewModel.HeaderEntity, Model.ViewDate, 20, 20, null)</th>
+                                </tr>
+
+                                <tr>
+                                    <th><small>Date</small></th>
+                                    <th><small>Competition</small></th>
+                                    <th><small>Venue</small></th>
+                                    <th><small>Opponents</small></th>
+                                    <th class="text-center"><small>Score</small></th>
+                                    <th class="text-center"><small>Sub</small></th>
+                                    <th class="text-center"><small>Goals</small></th>
+                                    <th class="text-center"><small>O.G.</small></th>
+                                    <th class="text-center"><small>Discipline</small></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var matchGroup in teamGroup.GroupBy(t => t.MatchViewModel.PrimaryKey).OrderByDescending(t => t.First().MatchViewModel.MatchDate))
+                                {
+                                    var firstMatchEvent = matchGroup.Where(m => m.Entity.MatchEventType != MatchEventType.Substitute).FirstOrDefault();
+
+                                    if (firstMatchEvent != null)
+                                    {
+                                        var isTeam1 = firstMatchEvent.TeamViewModel.HeaderKey == firstMatchEvent.MatchViewModel.Team1Guid;
+
+                                        var opponentTeamViewModel = isTeam1
+                                            ? firstMatchEvent.MatchViewModel.Team2ViewModel
+                                            : firstMatchEvent.MatchViewModel.Team1ViewModel;
+
+                                        var scoreline = isTeam1
+                                            ? string.Format("{0}-{1}", firstMatchEvent.MatchViewModel.Team1Ft, firstMatchEvent.MatchViewModel.Team2Ft)
+                                            : string.Format("{0}-{1}", firstMatchEvent.MatchViewModel.Team2Ft, firstMatchEvent.MatchViewModel.Team1Ft);
+
+                                        var venueViewModel = firstMatchEvent.MatchViewModel.VenueViewModel;
+
+                                        <tr>
+                                            <td><small>@firstMatchEvent.MatchViewModel.MatchDate.ToShortDateString()</small></td>
+                                            <td><small>@Html.ApprovalTypeLink(firstMatchEvent.MatchViewModel.CompetitionViewModel)</small></td>
+                                            <td><small>@Html.ApprovalTypeLink(AreaType.Ven, venueViewModel.ToString(), venueViewModel.HeaderKey)</small></td>
+                                            <td><small>@Html.DisplayBadgeWithTeamLink(opponentTeamViewModel.VersionEntity.Team, firstMatchEvent.MatchViewModel.MatchDate, 20, 20, null)</small></td>
+                                            <td class="text-center"><small>@Html.ApprovalTypeLink(AreaType.Mtc, scoreline, firstMatchEvent.MatchViewModel.HeaderKey)</small></td>
+
+                                            <td class="text-center">
+                                                @{ var appearanceEvents = matchGroup.Where(m => m.Entity.MatchEventType == MatchEventType.BroughtOn || m.Entity.MatchEventType == MatchEventType.TakenOff).OrderBy(m => m.Entity.Minute).ThenBy(m => m.Entity.Extra); }
+
+                                                @foreach (var appearanceEvent in appearanceEvents)
+                                                {
+                                                    @Html.Raw(Html.MatchEventImage(appearanceEvent, false))
+                                                }
+                                            </td>
+
+                                            <td class="text-center">
+                                                <small>
+                                                    @if (matchGroup.Any(m => m.Entity.MatchEventType == MatchEventType.Scored))
+                                                    {
+                                                        @Html.Raw(matchGroup.Count(m => m.Entity.MatchEventType == MatchEventType.Scored))
+                                                    }
+                                                </small>
+                                            </td>
+
+                                            <td class="text-center">
+                                                <small>
+                                                    @if (matchGroup.Any(m => m.Entity.MatchEventType == MatchEventType.OwnGoal))
+                                                    {
+                                                        @Html.Raw(matchGroup.Count(m => m.Entity.MatchEventType == MatchEventType.OwnGoal))
+                                                    }
+                                                </small>
+                                            </td>
+
+                                            <td class="text-center">
+
+                                                @{
+                                                    var isBooked = matchGroup.Any(m => m.Entity.MatchEventType == MatchEventType.Booked);
+                                                    var isSentOff = matchGroup.Any(m => m.Entity.MatchEventType == MatchEventType.SentOff);
+                                                }
+
+                                                @if (isBooked && isSentOff)
+                                                {
+                                                    @Html.Raw(Html.MatchEventImage(matchGroup.First(m => m.Entity.MatchEventType == MatchEventType.Booked), true))
+                                                }
+
+                                                @if (isBooked && !isSentOff)
+                                                {
+                                                    @Html.Raw(Html.MatchEventImage(matchGroup.First(m => m.Entity.MatchEventType == MatchEventType.Booked), false))
+                                                }
+
+                                                @if (!isBooked && isSentOff)
+                                                {
+                                                    @Html.Raw(Html.MatchEventImage(matchGroup.First(m => m.Entity.MatchEventType == MatchEventType.SentOff), false))
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+
+                    }
+                }
+            </div>
+
+            <div class="col-md-4">
+
+                <h4 class="">Season list:</h4>
+
+                @foreach (var leagueCampaignViewModel in Model.LeagueCampaignViewModels)
+                { 
+                    var classValue = Model.ViewDate > leagueCampaignViewModel.Entity.StartDate && Model.ViewDate < leagueCampaignViewModel.Entity.EndDate ? "btn btn-primary btn-block" : "btn btn-default btn-block";
+                            
+                    <table class="table table-striped table-condensed table-hover">
+                        <thead>
+
+                            <tr>
+                                <th colspan="5">
+                                    @Html.ActionLink(leagueCampaignViewModel.ToString(), "Summary", "Details", new { @area = AreaType.Ppl.ToString(), dt = leagueCampaignViewModel.Entity.EndDate.ToUrlString() }, new { @class = classValue })
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <th></th>
+                                <th class="text-center" style="width: 1px; white-space:nowrap;"><small>Apps(as sub)</small></th>
+                                <th class="text-center" style="width: 1px; white-space:nowrap;"><img src="~/images/goal.png" style="height: 12px; vertical-align: middle;" title="Goals scored" /></th>
+                                <th class="text-center" style="width: 1px; white-space:nowrap;"><img src="~/images/booked.png" style="height: 12px; vertical-align: middle;" title="Bookings" /></th>
+                                <th class="text-center" style="width: 1px; white-space:nowrap;"><img src="~/images/sentoff.png" style="height: 12px; vertical-align: middle;" title="Sendings off" /></th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @{ var seaonMatchEvents = Model.GetSeasonMatchEvents(leagueCampaignViewModel);  }
+
+                            @foreach (var teamGroup in seaonMatchEvents.GroupBy(g => g.Entity.TeamPrimaryKey))
+                            {
+                                var teamViewModel = teamGroup.First().TeamViewModel;
+
+                                <tr>
+                                    <td class="text-center" colspan="5">
+                                        <small>@Html.DisplayBadgeWithTeamLink(teamViewModel.HeaderEntity, Model.ViewDate, 20, 20, null)</small>
+                                    </td>
+                                </tr>
+
+                                foreach (var campaignGroup in teamGroup.GroupBy(g => g.MatchViewModel.VersionEntity.CampaignStage.CampaignKey))
+                                {
+                                    var firstMatchViewModel = campaignGroup.First().MatchViewModel;
+
+                                    <tr>
+                                        <td>
+                                            <small>@Html.ApprovalTypeLink(firstMatchViewModel.CompetitionViewModel)</small>
+                                        </td>
+
+                                        <td class="text-center">
+                                            <small>
+                                                @{
+                                                    var started = campaignGroup.Count(c => c.Entity.MatchEventType == MatchEventType.Started);
+                                                    var broughtOn = campaignGroup.Count(c => c.Entity.MatchEventType == MatchEventType.BroughtOn);
+
+                                                    if (started + broughtOn >= 0)
+                                                    {
+                                                        if (broughtOn == 0)
+                                                        {
+                                                            @Html.Raw(started.ToString());
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.Raw(string.Format("{0}({1})", started + broughtOn, broughtOn));
+                                                        }
+                                                    }
+                                                }
+                                            </small>
+                                        </td>
+
+                                        <td class="text-center">
+                                            <small>
+                                                @if (campaignGroup.Any(c => c.Entity.MatchEventType == MatchEventType.Scored))
+                                                {
+                                                    @Html.Raw(teamGroup.Count(c => c.Entity.MatchEventType == MatchEventType.Scored))
+                                                }
+                                            </small>
+                                        </td>
+
+                                        <td class="text-center">
+                                            <small>
+                                                @if (campaignGroup.Any(c => c.Entity.MatchEventType == MatchEventType.Booked))
+                                                {
+                                                    @Html.Raw(teamGroup.Count(c => c.Entity.MatchEventType == MatchEventType.Booked))
+                                                }
+                                            </small>
+                                        </td>
+
+                                        <td class="text-center">
+                                            <small>
+                                                @if (campaignGroup.Any(c => c.Entity.MatchEventType == MatchEventType.SentOff))
+                                                {
+                                                    @Html.Raw(teamGroup.Count(c => c.Entity.MatchEventType == MatchEventType.SentOff))
+                                                }
+                                            </small>
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.SelectTab("summary")
+

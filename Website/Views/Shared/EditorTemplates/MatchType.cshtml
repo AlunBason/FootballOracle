@@ -1,0 +1,21 @@
+﻿@using FootballOracle.Foundation
+
+@model MatchType?
+
+<div class="row form-group">
+
+    @Html.LabelForModel(new { @class = "col-md-4 control-label" })
+
+    <div class="col-md-8">
+        @(Html.Kendo().DropDownListFor(m => m)
+            .OptionLabel("None")
+            .HtmlAttributes(new { style = "width:150px" })
+            .DataTextField("Description")
+            .DataValueField("Code")
+            .BindTo(EnumCodePicker.Of<MatchType>())
+            .Value(Model != null ? ((int)Model).ToString() : null)
+        )        
+    </div>
+</div>
+
+

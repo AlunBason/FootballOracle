@@ -1,0 +1,28 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionEditorViewModel
+
+<div class="well">
+    <form method="post" class="form-horizontal">
+        <fieldset>
+            <legend>@ViewBag.Title</legend>
+
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(false, string.Empty, new { @class = "alert alert-danger" })
+
+            @Html.EditorFor(m => m.CompetitionName)
+            @Html.EditorFor(m => m.CompetitionType)
+            @Html.EditorFor(m => m.OrganisationGuid)
+            @Html.EditorFor(m => m.Rank)
+            @Html.EditorFor(m => m.WebAddress)
+            @Html.EditorFor(m => m.EffectiveFrom)
+
+            @Html.HiddenFor(m => m.PrimaryKey)
+            @Html.HiddenFor(m => m.HeaderKey)
+            @Html.HiddenFor(m => m.ViewDate)
+            @Html.HiddenFor(m => m.EffectiveTo)
+
+            @Html.Partial("_SubmitButtons")
+
+        </fieldset>
+    </form>
+</div>

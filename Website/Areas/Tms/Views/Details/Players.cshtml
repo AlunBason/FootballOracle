@@ -1,0 +1,88 @@
+﻿@using FootballOracle.Foundation
+
+@model FootballOracle.Models.ViewModels.Approvable.Teams.TeamPlayersViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' players", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+<div class="row">
+
+    <div class="col-md-4">
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+                <tr class="success">
+                    <th>Scoring</th>
+                    <th class="text-center">Goals</th>
+                    <th class="text-center">Per game</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model.PersonTableItemViewModels.Where(p => p.Goals > 0).OrderByDescending(p => p.Goals))
+                {
+                    <tr>
+                        <td>@Html.ApprovalTypeLink(AreaType.Ppl, item.PersonViewModel.ToString(), item.PersonViewModel.HeaderKey)</td>
+                        <td class="text-center">@item.Goals.ToString()</td>
+                        <td class="text-center">@string.Format("{0:P0}", Decimal.Divide(item.Goals, item.Started + item.BroughtOn))</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-4">
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+                <tr class="success">
+                    <th>Discipline</th>
+                    <th class="text-center">Red cards</th>
+                    <th class="text-center">Yellow cards</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model.PersonTableItemViewModels.Where(p => p.Booked > 0 || p.SentOff > 0).OrderByDescending(p => p.SentOff).ThenByDescending(p => p.Booked))
+                {
+                    <tr>
+                        <td>@Html.ApprovalTypeLink(AreaType.Ppl, item.PersonViewModel.ToString(), item.PersonViewModel.HeaderKey)</td>
+                        <td class="text-center">@item.SentOff.ToString()</td>
+                        <td class="text-center">@item.Booked.ToString()</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-4">
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+                <tr class="success">
+                    <th>Appearances</th>
+                    <th class="text-center">Starts</th>
+                    <th class="text-center">As Sub</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model.PersonTableItemViewModels.Where(p => p.Started > 0 || p.BroughtOn > 0))
+                {
+                    <tr>
+                        <td>@Html.ApprovalTypeLink(AreaType.Ppl, item.PersonViewModel.ToString(), item.PersonViewModel.HeaderKey)</td>
+                        <td class="text-center">@item.Started.ToString()</td>
+                        <td class="text-center">@item.BroughtOn.ToString()</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+@Html.SelectTab("players")

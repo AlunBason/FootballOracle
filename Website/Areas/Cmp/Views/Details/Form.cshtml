@@ -1,0 +1,54 @@
+﻿@using Kendo.Mvc.UI
+
+@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionFormViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' form", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+@if (Model.SelectedCampaignViewModel != null)
+{
+    <div class="row">
+        <div class="col-md-2">
+            <a class="btn btn-xs @(Model.ViewType == 3 ? "btn-primary" : "btn-default")" href="@Url.Action("Form", new { dt = Model.ViewDate.ToUrlString(), vt = 3, mc = Model.MatchCount })">All</a>
+            <a class="btn btn-xs @(Model.ViewType == 1 ? "btn-primary" : "btn-default")" href="@Url.Action("Form", new { dt = Model.ViewDate.ToUrlString(), vt = 1, mc = Model.MatchCount })">Home</a>
+            <a class="btn btn-xs @(Model.ViewType == 2 ? "btn-primary" : "btn-default")" href="@Url.Action("Form", new { dt = Model.ViewDate.ToUrlString(), vt = 2, mc = Model.MatchCount })">Away</a>
+        </div>
+        <div class="col-md-4 text-right">
+        
+            @using (Html.BeginForm(FormMethod.Get))
+            {
+                <fieldset>
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.PrimaryKey)
+                    @Html.HiddenFor(m => m.ViewType)
+                    @Html.HiddenFor(m => m.ViewDate)
+                    Matches:
+                    @Html.Kendo().IntegerTextBoxFor(m => m.MatchCount).Min(1).HtmlAttributes(new { style = "width:80px;" })
+                    <button class="btn btn-xs btn-success">Submit</button>
+                </fieldset>
+            }
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            @Html.ToHtmlLeagueTable(Model.SelectedCampaignViewModel, null, Model.ViewDate, Model.ViewType)
+        </div>
+    </div>    
+}
+else
+{
+    <div class="row col-md-12 alert alert-danger">
+        <span style="vertical-align: middle;">
+            @string.Format("No campaigns found for {0}.", @Model.ViewDate.ToShortDateString())
+        </span>
+        @Html.ActionLink("Set date to today", "Form", new { dt = string.Empty }, new { @class = "btn btn-xs btn-danger" })
+    </div>
+}
+
+
+
+@Html.SelectTab("form")
+

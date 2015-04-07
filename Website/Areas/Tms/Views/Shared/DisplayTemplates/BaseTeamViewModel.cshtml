@@ -1,0 +1,130 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Teams.BaseTeamViewModel
+
+@Html.Partial("_Breadcrumbs", Model.Breadcrumbs)
+
+@{
+    var action = ViewContext.RouteData.Values["action"].ToString();
+}
+
+<div class="row">
+
+    <div class="col-md-8">
+        
+        <div>
+            @if(Model.ResourceBytes != null)
+            {
+                @Html.BytesToImage(Model.ResourceBytes, 100, 100, string.Format("{0} badge", Model.ToString()))
+            }
+            
+            <span class="h3" style="vertical-align:middle;">
+                @Model.FullName
+            </span>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.NickName))
+        {
+            <div>
+                <span class="h5">
+                    <small>Nickname:</small> @Model.NickName
+                </span>
+            </div>
+        }
+
+        @if (Model.VenueViewModel != null)
+        {
+            <div>
+                <span class="h5">
+                    <small>Home Ground:</small> @Html.ApprovalTypeLink(Model.VenueViewModel)
+                </span>
+            </div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.WebAddress))
+        {
+            <div>
+                <span class="h5">
+                    <small>Website:</small> <a class="text-success" href="@Model.WebAddress" target="_blank">@Model.WebAddress</a>
+                </span>
+            </div>
+        }
+    </div>
+
+    
+
+    <div class="col-md-4 text-right">
+        <label>Season:</label>
+        @(Html.Kendo().DropDownListFor(m => m.SelectedCampaignDate)
+            .HtmlAttributes(new { style = "width:150px", @class = "text-left" })
+            .DataTextField("Description")
+            .DataValueField("EndDateString")
+            .BindTo(Model.CampaignPickerData)
+            .Events(e => e.Select("selectedCampaignDateOnSelect"))
+        )
+
+        <br /><br />
+        <label>View date:</label>
+        @(Html.Kendo()
+            .DatePickerFor(m => m.ViewDate)
+            .HtmlAttributes(new { style = "width:150px" })
+            .Min(Model.EffectiveFrom)
+            .Max(Model.EffectiveTo)
+            .Events(e => e.Change("datePickerOnChange"))
+        )
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+
+            <li id="summary">
+                <a href="@Url.Action("Summary", "Details")">Summary</a>
+            </li>
+
+            <li id="players">
+                <a href="@Url.Action("Players", "Details")">Players</a>
+            </li>
+
+            <li id="progress">
+                <a href="@Url.Action("Progress", "Details")">Progress</a>
+            </li>
+
+            <li id="statistics">
+                <a href="@Url.Action("Statistics", "Details")">Statistics</a>
+            </li>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li id="edit">
+                    <a href="@Url.Action("Summary", "Editor", new { pk = Model.ShortPrimaryKey })">Edit</a>
+                </li>    
+            }
+        </ul>
+    </div>
+</div>
+<br />
+
+<script>
+    function selectedCampaignDateOnSelect(e) {
+        var endDateString = this.dataItem(e.item.index()).EndDateString;
+
+        var redirect = '@Url.Action(action, new { id = Model.ShortPrimaryKey, dt = "__dt__" })';
+        redirect = redirect.replace("__dt__", endDateString);
+
+        window.location.href = redirect;
+    };
+
+    function datePickerOnChange() {
+        var selectedDate = this.value();
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var dd = selectedDate.getDate() < 10 ? "0" + selectedDate.getDate() : selectedDate.getDate();
+        var mmm = months[selectedDate.getMonth()];
+        var yyyy = selectedDate.getFullYear();
+
+        var redirect = '@Url.Action(action, new { id = Model.ShortPrimaryKey, dt = "__dt__" })';
+        redirect = redirect.replace("__dt__", dd + mmm + yyyy);
+
+        window.location.href = redirect;
+    };
+</script>
+

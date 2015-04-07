@@ -1,0 +1,165 @@
+﻿@using FootballOracle.Models.Entities
+
+@model FootballOracle.Models.ViewModels.Standard.MatchesByDateViewModel
+
+@{
+    ViewBag.Title = "By date";
+}
+
+<div class="row col-md-12 text-center">
+    <br />
+    <label>View date:</label>
+    @(Html.Kendo()
+            .DatePickerFor(m => m.ViewDate)
+            .HtmlAttributes(new { style = "width:150px" })
+            .Min(Date.LowDate)
+            .Max(Date.HighDate)
+            .Events(e => e.Change("datePickerOnChange"))
+    )
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <table class="table table-condensed table-hover small">
+            <thead>
+                <tr>
+                    @if (Model.PreviousMatchViewModels.Any())
+                    {
+                        <th class="text-center h4">@Html.ByDateLink(Model.PreviousMatchViewModels.First().MatchDate, null)</th>
+                    }
+                    else
+                    {
+                        <th class="text-center h4">@Html.ByDateLink(Model.ViewDate.AddDays(-1), null)</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.PreviousMatchViewModels.Any())
+                {
+                    <tr>
+                        <td class="alert alert-info text-center">
+                            @string.Format("No matches found.")
+                        </td>
+                    </tr>
+                }
+
+                @foreach (var group in Model.PreviousMatchViewModels.OrderBy(o => o.CountryViewModel.ToString()).ThenBy(t => t.CompetitionViewModel.VersionEntity.Rank ?? int.MaxValue).GroupBy(mv => mv.VersionEntity.CampaignStage.CampaignKey))
+                {
+                    var campaign = group.First().VersionEntity.CampaignStage.Campaign;
+                    var country = group.First().CompetitionViewModel.VersionEntity.Competition.GetParentCountry(Model.ViewDate);
+
+                    <tr>
+                        <th class="text-center bg-success">
+                            @Html.DisplayCountryFlagWithCompetitionLink(campaign, Model.ViewDate, 20, 20, null)
+                        </th>
+                    </tr>
+
+                    foreach (var matchViewModel in group)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(m => matchViewModel, "MatchSummary-3", new { TeamShortNames = true })
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="panel panel-info">
+            <div class="text-center h4">@Html.ByDateLink(Model.ViewDate, null)</div>
+
+            @foreach (var group in Model.ViewDateMatchViewModels.OrderBy(o => o.CountryViewModel.ToString()).ThenBy(t => t.CompetitionViewModel.VersionEntity.Rank ?? int.MaxValue).GroupBy(mv => mv.VersionEntity.CampaignStage.CampaignKey))
+            {
+                var campaign = group.First().VersionEntity.CampaignStage.Campaign;
+                
+                <div class="panel-heading panel-title text-center">
+                    @Html.DisplayCountryFlagWithCompetitionLink(campaign, Model.ViewDate, 20, 20, null)
+                </div>
+
+                <div class="panel-body">
+                    <table class="table table-striped table-condensed table-hover">
+
+                        @foreach (var matchViewModel in group)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(m => matchViewModel, "MatchSummary-6")
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+        <table class="table table-condensed table-hover small">
+            <thead>
+                <tr>
+                    @if (Model.NextMatchViewModels.Any())
+                    {
+                        <th class="text-center h4">@Html.ByDateLink(Model.NextMatchViewModels.First().MatchDate, null)</th>
+                    }
+                    else
+                    {
+                        <th class="text-center h4">@Html.ByDateLink(Model.ViewDate.AddDays(1), null)</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.NextMatchViewModels.Any())
+                {
+                    <tr>
+                        <td class="alert alert-info text-center">
+                            @string.Format("No matches found.")
+                        </td>
+                    </tr>
+                }
+
+                @foreach (var group in Model.NextMatchViewModels.OrderBy(o => o.CountryViewModel.ToString()).ThenBy(t => t.CompetitionViewModel.VersionEntity.Rank ?? int.MaxValue).GroupBy(mv => mv.VersionEntity.CampaignStage.CampaignKey))
+                {
+                    var campaign = group.First().VersionEntity.CampaignStage.Campaign;
+                    var country = group.First().CompetitionViewModel.VersionEntity.Competition.GetParentCountry(Model.ViewDate);
+
+                    <tr>
+                        <th class="text-center bg-success">
+                            @Html.DisplayCountryFlagWithCompetitionLink(campaign, Model.ViewDate, 20, 20, null)
+                        </th>
+                    </tr>
+
+                    foreach (var matchViewModel in group)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(m => matchViewModel, "MatchSummary-3", new { TeamShortNames = true })
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function datePickerOnChange() {
+        var selectedDate = this.value();
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var dd = selectedDate.getDate() < 10 ? "0" + selectedDate.getDate() : selectedDate.getDate();
+        var mmm = months[selectedDate.getMonth()];
+        var yyyy = selectedDate.getFullYear();
+
+        var redirect = '@Url.Action("ByDate", new { dt = "__dt__" })';
+        redirect = redirect.replace("__dt__", dd + mmm + yyyy);
+
+        window.location.href = redirect;
+    };
+</script>

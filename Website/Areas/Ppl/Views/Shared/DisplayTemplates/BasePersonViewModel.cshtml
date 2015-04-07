@@ -1,0 +1,84 @@
+﻿@using FootballOracle.Foundation
+@using FootballOracle.Foundation.Interfaces
+@using FootballOracle.Models.Entities
+@using FootballOracle.Models.ViewModels.Approvable.People
+
+@model FootballOracle.Models.ViewModels.Approvable.People.BasePersonViewModel
+
+@Html.Partial("_Breadcrumbs", Model.Breadcrumbs)
+
+<div class="row">
+    <div class="col-md-8">
+        <span class="h1">@Model.ToString()</span>
+
+        @if (Model.VersionEntity.CountryGuid != null)
+        {
+            <div class="row col-md-12">
+                <span class="h5">
+                    <small>Country: </small>@Html.DisplayFlagWithCountryLink(Model.VersionEntity.Country, Model.ViewDate, 20, 20, null)
+                </span>
+            </div>
+        }
+
+        @if (Model.VersionEntity.DateOfBirth != null)
+        {
+            <div class="row col-md-12">
+                <span class="h5">
+                    <small>Age: </small>@((((DateTime)Model.VersionEntity.DateOfBirth)).ToAge(DateTime.Today))
+                </span>
+            </div>
+
+            <div class="row col-md-12">
+                <span class="h5">
+                    <small>Date of birth: </small>@(((DateTime)Model.VersionEntity.DateOfBirth).ToDisplayString())
+                </span>
+            </div>
+        }
+        
+        @if (Model.VersionEntity.Height != null && Model.VersionEntity.Height > 0)
+        {
+            <div class="row col-md-12">
+                <span class="h5">
+                    <small>Height: </small>@string.Format("{0}cm", Model.VersionEntity.Height)
+                </span>
+            </div>
+        }
+        
+        <div class="row col-md-12">&nbsp;</div>
+
+    </div>
+    <div class="col-md-4 text-right">
+        @{ var teamViewModel = Model.TeamViewModel(Model.ViewDate); }
+
+        @if (teamViewModel != null && teamViewModel.VersionEntity.Resource != null)
+        {
+            @Html.BytesToImage(teamViewModel.VersionEntity.Resource.ResourceBytes, 100, 100, string.Format("{0} badge", teamViewModel.ToString()))
+        }
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.WebAddress))
+    {
+        <h5>
+            <a class="text-success" href="@Model.WebAddress" target="_blank">@Model.WebAddress</a>
+        </h5>
+    }
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+
+            <li id="summary">
+                <a href="@Url.Action("Summary", "Details")">Summary</a>
+            </li>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li id="edit">
+                    <a href="@Url.Action("Summary", "Editor", new { pk = Model.ShortPrimaryKey })">Edit</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<br />

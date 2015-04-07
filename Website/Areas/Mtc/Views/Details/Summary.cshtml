@@ -1,0 +1,123 @@
+﻿@using FootballOracle.Foundation.Interfaces;
+@using FootballOracle.Foundation;
+@using FootballOracle.Models.Entities;
+@using FootballOracle.Models.ViewModels.Approvable.People
+
+@model FootballOracle.Models.ViewModels.Approvable.Matches.MatchSummaryViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' summary", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+
+        @if (!Model.Team1Starters.Any() && !Model.Team2Starters.Any())
+        {
+            <div class="alert alert-info">
+                @string.Format("Match details unavailable.")
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-6 text-right">
+
+                            @Html.DisplayBadgeWithTeamLink(Model.Team1ViewModel.HeaderEntity, Model.MatchDate, 30, 30, new { @class = "h4" }, true)
+
+                            @foreach (var item in Model.Team1Starters)
+                            {
+                                var personViewModel = item.PersonViewModel;
+
+                                <div>
+                                    @Html.PersonMatchEvents(Model.VersionEntity.MatchEvents.Where(e => e.PersonPrimaryKey == item.Entity.PersonPrimaryKey).ToViewModels(Model.ViewDate))
+                                    @Html.ApprovalTypeLink(AreaType.Ppl, personViewModel.ToString(), personViewModel.HeaderKey)
+                                </div>
+                            }
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            @Html.DisplayBadgeWithTeamLink(Model.Team2ViewModel.HeaderEntity, Model.MatchDate, 30, 30, new { @class = "h4" })
+
+                            @foreach (var item in Model.Team2Starters)
+                            {
+                                var personV = item.PersonViewModel;
+
+                                <div>
+                                    @Html.ApprovalTypeLink(AreaType.Ppl, string.Format("{0} {1}", personV.VersionEntity.Forenames, personV.VersionEntity.Surname), personV.HeaderKey)
+                                    @Html.PersonMatchEvents(Model.VersionEntity.MatchEvents.Where(e => e.PersonPrimaryKey == item.Entity.PersonPrimaryKey).ToViewModels(Model.ViewDate))
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 text-center h5">Substitues</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 text-right">
+                            @foreach (var item in Model.Team1Substitutes)
+                            {
+                                var personV = item.PersonViewModel;
+
+                                <div>
+                                    @Html.PersonMatchEvents(Model.VersionEntity.MatchEvents.Where(e => e.PersonPrimaryKey == item.Entity.PersonPrimaryKey).ToViewModels(Model.ViewDate))
+                                    @Html.ApprovalTypeLink(AreaType.Ppl, string.Format("{0} {1}", personV.VersionEntity.Forenames, personV.VersionEntity.Surname), personV.HeaderKey)
+                                </div>
+                            }
+                        </div>
+
+                        <div class="col-md-6">
+                            @foreach (var item in Model.Team2Substitutes)
+                            {
+                                var personV = item.PersonViewModel;
+
+                                <div>
+                                    @Html.ApprovalTypeLink(AreaType.Ppl, string.Format("{0} {1}", personV.VersionEntity.Forenames, personV.VersionEntity.Surname), personV.HeaderKey)
+                                    @Html.PersonMatchEvents(Model.VersionEntity.MatchEvents.Where(e => e.PersonPrimaryKey == item.Entity.PersonPrimaryKey).ToViewModels(Model.ViewDate))
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+
+                    <div class="panel">
+
+                        @foreach (var group in Model.OtherMatchesByCompetitionAndDate.GroupBy(g => g.MatchDate))
+                        {
+                            <div class="panel-heading panel-title text-center"><strong>Other day's matches</strong></div>
+
+                            <div class="panel-body">
+                                <table class="table table-striped table-condensed table-hover">
+
+                                    @foreach (var matchViewModel in group)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(m => matchViewModel, "MatchSummary-6")
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@Html.SelectTab("summary")
+
+

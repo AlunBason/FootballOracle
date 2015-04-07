@@ -1,0 +1,15 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionVersionSummaryViewModel
+
+<div class="well">
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>@ViewBag.Title</legend>
+            @Html.EditorFor(m => m.CompetitionName)
+            @Html.EditorFor(m => m.CompetitionTypeName)
+            @Html.EditorFor(m => m.Organisation)
+            @Html.EditorFor(m => m.Rank)
+            @Html.EditorFor(m => m.WebAddress)
+            @Html.EditorFor(m => m.EffectiveFrom)
+        </fieldset>
+    </form>
+</div>

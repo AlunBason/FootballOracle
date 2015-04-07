@@ -1,0 +1,113 @@
+﻿@using Microsoft.AspNet.Identity
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Football Oracle", "Index", "Home", new { area = string.Empty }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+
+                <li>
+                    <a href="@Url.Action("Index", "Home", new { area = string.Empty })">
+                        <span class="glyphicon glyphicon-home"></span>
+                    </a>
+                </li>
+
+                @{
+                    var action = (ViewContext.RouteData.Values["action"] ?? "").ToString().ToLower();
+                    var controller = (ViewContext.RouteData.Values["controller"] ?? "").ToString().ToLower();
+                    var area = (ViewContext.RouteData.DataTokens["area"] ?? "").ToString().ToLower();
+                }
+
+                @if (area != string.Empty || controller != "home" || action != "index")
+                {
+                    <li style="z-index: 1; top: 10px;">
+                        <small>
+                            @(Html.Kendo().AutoComplete()
+                                .Name("navAutoComplete")
+                                .Filter("contains")
+                                .MinLength(3)
+                                .Suggest(false)
+                                .HtmlAttributes(new { style = "width:240px" })
+                                .Value(string.Empty)
+                                .Placeholder("Search Football Oracle...")
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("GetCombinedAutoCompleteList", "Json", new { @area = string.Empty })
+                                            .Data("navAutoCompleteAdditionalData");
+                                    })
+                                    .ServerFiltering(true);
+                                })
+                                .Events(e => e.Change("navAutoComplete_onChange"))
+                            )
+                        </small>
+                    </li>
+                }
+
+                <li>@Html.ActionLink("Today", "ByDate", "Home", new { area = string.Empty }, null)</li>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Home", "Index", "Home", new { area = AreaType.Adm.ToString() }, null)</li>
+                            <li>@Html.ActionLink("Import match details", "ImportMatchDetails", "Admin", new { area = AreaType.Mtc.ToString() }, null)</li>
+                            <li>@Html.ActionLink("Create Competition", "Create", "Editor", new { area = AreaType.Cmp.ToString() }, null)</li>
+                            <li>@Html.ActionLink("Create Match", "Create", "Editor", new { area = AreaType.Mtc.ToString() }, null)</li>
+                            <li>@Html.ActionLink("Create Organisation", "Create", "Editor", new { area = AreaType.Org.ToString() }, null)</li>
+                            <li>@Html.ActionLink("Create Person", "Create", "Editor", new { area = AreaType.Ppl.ToString() }, null)</li>
+                            <li>@Html.ActionLink("Create Team", "Create", "Editor", new { area = AreaType.Tms.ToString() }, null)</li>
+                            <li>@Html.ActionLink("Create Venue", "Create", "Editor", new { area = AreaType.Ven.ToString() }, null)</li>
+                        </ul>
+                    </li>
+                }
+
+                <li>@Html.ActionLink("About", "About", "Home", new { area = string.Empty }, null)</li>
+            </ul>
+
+            @if (Request.IsAuthenticated)
+            {
+                using (Html.BeginForm("LogOff", "Account", new { area = AreaType.Acc.ToString() }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                <ul class="nav navbar-nav">
+                    <li>
+                        @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: new { area = AreaType.Acc.ToString() }, htmlAttributes: new { title = "Manage" })
+                    </li>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                </ul>
+                }
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li> @Html.ActionLink("Register", "Register", "Account", routeValues: new { area = AreaType.Acc.ToString() }, htmlAttributes: new { id = "registerLink" })</li>
+                    <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: new { area = AreaType.Acc.ToString() }, htmlAttributes: new { id = "loginLink" })</li>
+                </ul>
+            }
+
+</div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    function navAutoCompleteAdditionalData() {
+        return { text: $("#navAutoComplete").val() };
+    }
+
+    function navAutoComplete_onChange() {
+        var url = '@Url.Action("Results", "Home", new { id = "__REPLACE__", area = string.Empty })';
+        window.location.href = url.replace('__REPLACE__', $("#navAutoComplete").val());
+    }
+</script>

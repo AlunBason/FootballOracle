@@ -1,0 +1,70 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Countries.BaseCountryViewModel
+
+@Html.Partial("_Breadcrumbs", Model.Breadcrumbs)
+
+<div class="row">
+    <div class="col-md-12">
+        @if (Model.ResourceBytes != null)
+        {
+            @Html.BytesToImage(Model.ResourceBytes, 100, 100, string.Format("{0} badge", Model.ToString()))
+        }
+
+        <span class="h1" style="vertical-align:middle;">@Model.ToString()</span>
+
+        @if (!string.IsNullOrWhiteSpace(Model.WebAddress))
+        {
+            <p class="lead">@Model.WebAddress</p>
+        }
+        
+    </div>
+    
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+
+            @if (Model.HasChildOrganisations)
+            {
+                <li id="organisations">
+                    <a href="@Url.Action("Organisations", "Details")">Organisations</a>
+                </li>    
+            }
+            
+            @if (Model.HasChildTeams)
+            {
+                <li id="teams">
+                    <a href="@Url.Action("Teams", "Details")">Teams</a>
+                </li>
+            }
+            
+            @if (Model.HasChildVenues)
+            {
+                <li id="venues">
+                    <a href="@Url.Action("Venues", "Details")">Venues</a>
+                </li>
+            }
+
+            <li id="summary">
+                <a href="@Url.Action("Summary", "Details")">Summary</a>
+            </li>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li id="edit">
+                    <a href="@Url.Action("Summary", "Editor", new { pk = Model.ShortPrimaryKey })">Edit</a>
+                </li>
+            }
+            
+            @if (User.IsInRole("Admin"))
+            {
+                <li id="admin">
+                    @Html.ActionLink("Admin", "Index", "Admin")
+                </li>
+            }
+            
+        </ul>
+    </div>
+</div>
+<br />
+

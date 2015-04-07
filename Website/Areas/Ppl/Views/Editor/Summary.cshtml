@@ -1,0 +1,26 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.People.PersonVersionSummaryViewModel
+
+@{
+    ViewBag.Title = "Person summary:";
+}
+
+@Html.DisplayForModel()
+
+@Html.Partial("_SaveChangesMessageType")
+
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            <a class="btn btn-primary btn-xs" href="@Url.Action("Summary")">Person summary</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Edit")">Edit person</a>
+        </p>
+
+        @Html.EditorForModel()
+    </div>
+
+    <div class="col-md-6">
+        @Html.Partial("EditableViewModels", Model.EditableViewModels)
+    </div>
+</div>
+
+@Html.SelectTab("edit")

@@ -1,0 +1,21 @@
+﻿@model string
+
+<div class="row form-group">
+    <div class="col-md-12">
+        @if (!ViewData.ModelMetadata.AdditionalValues.Any(a => a.Key == "HideLabel"))
+        {
+            @Html.LabelForModel(new { @class = "control-label" })
+        }
+            
+
+        @if (!ViewData.ModelMetadata.IsReadOnly)
+        {
+            @Html.TextBoxFor(m => m, new { @class = "form-control" })
+        }
+        else
+        {
+            <div class="form-control-static text-bigger">@Model</div>
+        }
+    </div>
+</div>
+

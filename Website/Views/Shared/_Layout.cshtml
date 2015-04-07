@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en-gb">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title [Football Oracle]</title>
+    <link rel="shortcut icon" href="@Url.Content("~/content/favicon.ico?v=1")" />
+    <link rel="icon" href="@Url.Content("~/content/favicon.ico?v=1")" />
+    
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    @{ 
+        var kendoVersion = "2014.3.1316";
+        var jQueryVersion = "1.9.1";
+        var bootstrapVersion = "3.3.2";
+    }
+
+    <link href="@string.Format("http://cdn.kendostatic.com/{0}/styles/kendo.common-bootstrap.min.css", kendoVersion)" rel="stylesheet" />
+    <link href="@string.Format("http://cdn.kendostatic.com/{0}/styles/kendo.bootstrap.min.css", kendoVersion)" rel="stylesheet" type="text/css" />
+    <link href="@string.Format("http://cdn.kendostatic.com/{0}/styles/kendo.dataviz.min.css", kendoVersion)" rel="stylesheet" type="text/css" />
+    <link href="@string.Format("http://cdn.kendostatic.com/{0}/styles/kendo.dataviz.bootstrap.min.css", kendoVersion)" rel="stylesheet" type="text/css" />
+    <link href="@string.Format("http://maxcdn.bootstrapcdn.com/bootswatch/{0}/cerulean/bootstrap.min.css", bootstrapVersion)" rel="stylesheet" type="text/css" />
+    <link href="~/Content/glyphicons.css" rel="stylesheet" />
+    <link href="~/Content/halflings.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+    <script src="@string.Format("http://code.jquery.com/jquery-{0}.min.js", jQueryVersion)"></script>
+    <script src="@string.Format("http://cdn.kendostatic.com/{0}/js/jszip.min.js", kendoVersion)"></script>
+    <script src="@string.Format("http://cdn.kendostatic.com/{0}/js/kendo.all.min.js", kendoVersion)"></script>
+    <script src="@string.Format("http://cdn.kendostatic.com/{0}/js/kendo.timezones.min.js", kendoVersion)"></script>
+    <script src="@string.Format("https://maxcdn.bootstrapcdn.com/bootstrap/{0}/js/bootstrap.min.js", bootstrapVersion)"></script>
+    
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script type="text/javascript">kendo.culture("en-GB");</script>
+
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    @Html.Partial("_Navigation")
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    
+    @RenderSection("scripts", required: false)
+</body>
+</html>

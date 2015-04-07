@@ -1,0 +1,119 @@
+﻿@using Kendo.Mvc.UI
+@using FootballOracle.Foundation
+
+@model FootballOracle.Models.ViewModels.Approvable.Competitions.BaseCompetitionViewModel
+
+@Html.Partial("_Breadcrumbs", Model.Breadcrumbs)
+
+@{
+    var action = ViewContext.RouteData.Values["action"].ToString();
+}
+
+<div class="row">
+    <div class="col-md-8">
+
+        @if (Model.CountryViewModel != null)
+        {
+            <div class="h4">
+                @Html.DisplayFlagWithCountryLink(Model.CountryViewModel.VersionEntity.Country, Model.ViewDate, 20, 20, null)
+            </div>
+        }
+
+        <span class="h1">@Model.ToString()</span>
+
+        @if (Model.SelectedCampaignViewModel != null)
+        {
+            <p class="lead">@Model.SelectedCampaignViewModel.ToString()</p>    
+        }
+        
+        @if (!string.IsNullOrWhiteSpace(Model.WebAddress))
+        {
+            <div>
+                <span class="h5">
+                    <small>Website:</small> <a class="text-success" href="@Model.WebAddress" target="_blank">@Model.WebAddress</a>
+                </span>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-4 text-right">
+        <label>Season:</label>
+        @(Html.Kendo().DropDownListFor(m => m.SelectedCampaignDate)
+            .HtmlAttributes(new { style = "width:150px", @class = "text-left" })
+            .DataTextField("Description")
+            .DataValueField("EndDateString")
+            .BindTo(Model.CampaignPickerData)
+            .Events(e => e.Select("selectedCampaignDateOnSelect")) 
+        )
+        <br /><br />
+        <label>View date:</label>
+        @(Html.Kendo()
+            .DatePickerFor(m => m.ViewDate)
+            .HtmlAttributes(new { style = "width:150px" })
+            .Min(Model.DatePickerMin)
+            .Max(Model.DatePickerMax)
+            .Events(e => e.Change("datePickerOnChange"))
+        )
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs nav-justified">
+
+            <li id="summary">
+                <a href="@Url.Action("Index", "Details")">Summary</a>
+            </li>
+
+            <li id="players">
+                <a href="@Url.Action("Players", "Details")">Players</a>
+            </li>
+
+            <li id="matches">
+                <a href="@Url.Action("Matches", "Details")">Matches</a>
+            </li>
+
+            <li id="form">
+                <a href="@Url.Action("Form", "Details")">Form</a>
+            </li>
+
+            <li id="edit">
+                <a href="@Url.Action("Summary", "Editor", new { pk = Model.ShortPrimaryKey })">Edit</a>
+            </li>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <li id="admin">
+                    @Html.ActionLink("Admin", "Index", "Admin")
+                </li>
+            }
+            
+        </ul>
+    </div>
+</div>
+<br />
+
+<script>
+    function selectedCampaignDateOnSelect(e) {
+        var endDateString = this.dataItem(e.item.index()).EndDateString;
+
+        var redirect = '@Url.Action(action, new { dt = "__dt__" })';
+        redirect = redirect.replace("__dt__", endDateString);
+
+        window.location.href = redirect;
+    };
+
+    function datePickerOnChange() {
+        var selectedDate = this.value();
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var dd = selectedDate.getDate() < 10 ? "0" + selectedDate.getDate() : selectedDate.getDate();
+        var mmm = months[selectedDate.getMonth()];
+        var yyyy = selectedDate.getFullYear();
+
+        var redirect = '@Url.Action(action, new { dt = "__dt__" })';
+        redirect = redirect.replace("__dt__", dd + mmm + yyyy);
+
+        window.location.href = redirect;
+    };
+</script>
+

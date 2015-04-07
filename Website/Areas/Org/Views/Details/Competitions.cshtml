@@ -1,0 +1,18 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Organisations.OrganisationCompetitionsViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' competitions", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <dl>
+            @foreach (var item in Model.ChildCompetitionViewModels)
+            {
+                @Html.DisplayFor(m => item, "ISearchResult");
+            }
+        </dl>
+    </div>
+</div>
+
+@Html.SelectTab("competitions")

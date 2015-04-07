@@ -1,0 +1,52 @@
+﻿@using Kendo.Mvc.UI
+
+@model short?
+
+@if (ViewData.ModelMetadata.AdditionalValues.Any(a => a.Key == "HideLabel"))
+{
+    if(!ViewData.ModelMetadata.IsReadOnly)
+    {
+        @(Html.Kendo().NumericTextBoxFor(m => m)
+            .Decimals(0)
+            .Format("n0")
+            .Min(short.MinValue)
+            .Max(short.MaxValue)
+            .Spinners(true)
+            .HtmlAttributes(new { @style = "width:100px" })
+        )
+    }
+    else
+    {
+        <div class="form-control-static">@Model</div>
+    }
+}
+else
+{
+    <div class="row form-group">
+        <div class="col-md-12">
+
+            @Html.LabelForModel(new { @class = "control-label" })
+
+            <div>
+                @if (!ViewData.ModelMetadata.IsReadOnly)
+                {
+
+                    @(Html.Kendo().NumericTextBoxFor(m => m)
+                    .Decimals(0)
+                    .Format("n0")
+                    .Min(short.MinValue)
+                    .Max(short.MaxValue)
+                    .Spinners(true)
+                    .HtmlAttributes(new { @style = "width:100px" })
+                    )
+                }
+                else
+                {
+                    <div class="form-control-static">@Model</div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+

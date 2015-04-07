@@ -1,0 +1,26 @@
+﻿@using FootballOracle.Models.ViewModels.Standard
+@using Kendo.Mvc.UI
+
+@model FootballOracle.Models.ViewModels.Standard.ImportMatchDetailsViewModel
+
+@{
+    ViewBag.Title = "ImportMatchDetails";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+            <fieldset>
+                @Html.AntiForgeryToken()
+
+                @Html.Kendo().DatePickerFor(m => m.StartDate).Min(Date.LowDate).Max(Date.HighDate).Format("dd/MM/yyyy")
+                @Html.Kendo().DatePickerFor(m => m.EndDate).Min(Date.LowDate).Max(Date.HighDate).Format("dd/MM/yyyy")
+
+                <button class="btn btn-xs btn-success">Submit</button>
+            </fieldset>
+        }
+    </div>
+</div>
+
+

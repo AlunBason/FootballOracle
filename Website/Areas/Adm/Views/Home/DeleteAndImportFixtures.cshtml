@@ -1,0 +1,34 @@
+﻿@model FootballOracle.Models.ViewModels.Standard.Admin.DeleteAndImportFixturesViewModel
+
+@{
+    ViewBag.Title = "Delete and import fixtures";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-group-sm">
+            <a class="btn btn-sm btn-primary" href="@Url.Action("DeleteAndImportFixtures")">Delete and import fixtures</a>
+            <a class="btn btn-sm btn-default" href="@Url.Action("UnresolvedMatches")">Unresolved matches</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="h4">The following campaigns will have unplayed fixtures deleted and re-imported:</div>
+
+        <ul class="list-group">
+
+            @foreach (var campaign in Model.CampaignViewModels)
+            {
+                <li class="list-group-item">@campaign.CampaignDisplayWithCompetition</li>
+            }
+
+        </ul>
+        
+        <form method="post" class="form-horizontal">
+            @Html.Partial("_SubmitButtons")
+        </form>
+</div>
+</div>

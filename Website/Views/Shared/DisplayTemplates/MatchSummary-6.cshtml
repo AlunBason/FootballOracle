@@ -1,0 +1,43 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Matches.BaseMatchViewModel
+
+@{ var showTeamShortNames = ViewData.Any(a => a.Key == "TeamShortNames") && (bool)ViewData["TeamShortNames"] == true; }
+
+<div class="row">
+    <small>
+
+        <span class="col-md-1 text-right">
+
+            <small>
+                <small>
+                    @if (Model.VersionEntity.MatchTimeTicks != 0)
+                    {
+                        @Model.MatchDate.ToDisplayString(false, true)
+                    }
+                </small>
+            </small>
+        </span>
+
+        <span class="col-md-5 text-right">
+            @Html.DisplayBadgeWithTeamLink(Model.VersionEntity.Team1, Model.ViewDate, 20, 20, null, true, showTeamShortNames)
+        </span>
+
+        <span class="col-md-1 text-center">
+            @if (Model.VersionEntity.Team1FT != null && Model.VersionEntity.Team2FT != null)
+            {
+                @Html.ApprovalTypeLink(AreaType.Mtc, string.Format("{0} : {1}", Model.VersionEntity.Team1FT, Model.VersionEntity.Team2FT), Model.HeaderKey)
+            }
+            else
+            {
+                @Html.ApprovalTypeLink(AreaType.Mtc, "v", Model.HeaderKey)
+            }
+        </span>
+
+        <span class="col-md-5">
+            @Html.DisplayBadgeWithTeamLink(Model.VersionEntity.Team2, Model.ViewDate, 20, 20, null, false, showTeamShortNames)
+        </span>
+
+        
+    </small>
+</div>
+
+

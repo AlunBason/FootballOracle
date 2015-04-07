@@ -1,0 +1,41 @@
+﻿@{ ViewBag.Title = "Home Page"; }
+
+<div class="row">
+    <div class="col-md-12">
+        <br />
+        <h4 class="text-center">Search Football Oracle or view @Html.ActionLink("today's", "ByDate") matches.</h4>
+
+        <div class="text-center">
+            @(Html.Kendo().AutoComplete()
+            .Name("combinedAutoComplete")
+            .Filter("contains")
+            .MinLength(3)
+            .Suggest(false)
+            .HtmlAttributes(new { style = "width:300px" })
+            .Value(string.Empty)
+            .DataSource(source =>
+            {
+                source.Read(read =>
+                {
+                    read.Action("GetCombinedAutoCompleteList", "Json", new { @area = string.Empty })
+                        .Data("combinedAutoCompleteAdditionalData");
+                })
+                .ServerFiltering(true);
+            })
+            .Events(e => e.Change("combinedAutoComplete_onChange"))
+            )
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function combinedAutoCompleteAdditionalData() {
+        return { text: $("#combinedAutoComplete").val() };
+    }
+
+    function combinedAutoComplete_onChange() {
+        var url = '@Url.Action("Results", new { id = "__REPLACE__" })';
+        window.location.href = url.replace('__REPLACE__', $("#combinedAutoComplete").val());
+    }
+</script>

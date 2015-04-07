@@ -1,0 +1,16 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.People.PersonVersionSummaryViewModel
+
+<div class="well">
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>@ViewBag.Title</legend>
+            @Html.EditorFor(m => m.Forenames)
+            @Html.EditorFor(m => m.Surname)
+            @Html.EditorFor(m => m.DateOfBirth)
+            @Html.EditorFor(m => m.DateOfDeath)
+            @Html.EditorFor(m => m.CountryGuid)
+            @Html.EditorFor(m => m.WebAddress)
+            @Html.EditorFor(m => m.EffectiveFrom)
+        </fieldset>
+    </form>
+</div>

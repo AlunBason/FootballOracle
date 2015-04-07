@@ -1,0 +1,82 @@
+﻿@using FootballOracle.Models.Entities
+@using FootballOracle.Foundation.Interfaces
+@using FootballOracle.Models.ViewModels.Approvable.Matches
+@using FootballOracle.Foundation
+@using FootballOracle.Models.ViewModels.Approvable.Venues
+@using FootballOracle.Models.ViewModels.Approvable.Teams
+
+@model FootballOracle.Models.ViewModels.Approvable.Venues.VenueSummaryViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' summary", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+@{
+    var action = ViewContext.RouteData.Values["action"].ToString();
+}
+
+<div class="row">
+    <div class="col-md-12">
+
+        @if (Model.DateRangePickerViewModels.Any())
+        {
+            <div>
+                <label>Selected season:</label>
+                @(Html.Kendo().DropDownListFor(m => m.SelectedDateRangePickerViewModel)
+                .HtmlAttributes(new { style = "width:150px", @class = "text-left" })
+                .DataTextField("Description")
+                .DataValueField("EndDateString")
+                .BindTo(Model.DateRangePickerViewModels)
+                .Events(e => e.Select("selectedCampaignDateOnSelect"))
+                )
+            </div>
+        }
+
+        <div>
+            @if (Model.SelectedLeagueCampaignViewModel != null)
+            {
+                <table class="table table-striped table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Competition</th>
+                            <th class="text-right">Home team</th>
+                            <th class="text-center">Score</th>
+                            <th>Away team</th>
+                            <th class="text-right">Attendance</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var matchViewModel in Model.SelectedMatchViewModels)
+                        {
+                            <tr>
+                                <td>@Html.ByDateLink(matchViewModel.MatchDate, null)</td>
+                                <td>@Html.ApprovalTypeLink(matchViewModel.CompetitionViewModel)</td>
+                                <td class="text-right">@Html.DisplayBadgeWithTeamLink(matchViewModel.VersionEntity.Team1, matchViewModel.VersionEntity.MatchDate, 20, 20, null, true)</td>
+                                <td class="text-center">@Html.ApprovalTypeLink(AreaType.Mtc, string.Format("{0}-{1}", matchViewModel.VersionEntity.Team1FT, matchViewModel.VersionEntity.Team2FT), matchViewModel.HeaderKey)</td>
+                                <td>@Html.DisplayBadgeWithTeamLink(matchViewModel.VersionEntity.Team2, matchViewModel.VersionEntity.MatchDate, 20, 20, null)</td>
+                                <td class="text-right">@string.Format("{0:#,#}", matchViewModel.VersionEntity.Attendance)</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function selectedCampaignDateOnSelect(e) {
+        var endDateString = this.dataItem(e.item.index()).EndDateString;
+
+        var redirect = '@Url.Action(action, new { dt = "__dt__" })';
+        redirect = redirect.replace("__dt__", endDateString);
+
+        window.location.href = redirect;
+    };
+</script>
+
+@Html.SelectTab("summary")

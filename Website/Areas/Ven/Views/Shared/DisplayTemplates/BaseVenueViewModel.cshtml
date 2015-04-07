@@ -1,0 +1,54 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Venues.BaseVenueViewModel
+
+@Html.Partial("_Breadcrumbs", Model.Breadcrumbs)
+
+<div class="row">
+    <div class="col-md-12">
+        @if (Model.CountryViewModel != null)
+        {
+            <div class="h4">
+                @Html.DisplayFlagWithCountryLink(Model.CountryViewModel.VersionEntity.Country, Model.ViewDate, 20, 20, null)
+            </div>
+        }
+
+        <div>
+            <span class="h1">@Model.ToString()</span>
+        </div>
+        
+        @if (!string.IsNullOrEmpty(Model.Address))
+        {
+            <div>@Model.Address</div>
+        }
+        
+        @if (Model.VersionEntity.Capacity != null && Model.VersionEntity.Capacity > 0)
+        {
+            <div class="row col-md-12">
+                <span class="h5">
+                    <small>Capacity: </small>@string.Format("{0:#,##0}", Model.VersionEntity.Capacity)
+                </span>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.VersionEntity.WebAddress))
+        {
+            <div><a class="text-success" href="@Model.VersionEntity.WebAddress" target="_blank">@Model.VersionEntity.WebAddress</a></div>
+        }
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+
+            <li id="summary">
+                <a href="@Url.Action("Summary", "Details")">Summary</a>
+            </li>
+            
+            <li id="edit">
+                <a href="@Url.Action("Summary", "Editor", new { pk = Model.ShortPrimaryKey })">Edit</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+<br />

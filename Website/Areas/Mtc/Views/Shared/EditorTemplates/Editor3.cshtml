@@ -1,0 +1,100 @@
+﻿@using Kendo.Mvc.UI
+
+@model FootballOracle.Models.ViewModels.Approvable.Matches.MatchEditorViewModel
+
+<div class="well">
+    <form method="post" class="form-horizontal">
+        <fieldset>
+            <legend>@ViewBag.Title</legend>
+
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(m => m.PrimaryKey)
+            @Html.HiddenFor(m => m.HeaderKey)
+            @Html.HiddenFor(m => m.ViewDate)
+            
+            <div class="form-group">
+                @Html.HiddenFor(m => m.MatchDate)
+                @Html.LabelFor(m => m.MatchDate, new { @class = "col-md-4 control-label" })
+                <div class="col-md-8 form-control-static">
+                    @string.Format("{0} {1}", Model.MatchDate.ToShortDateString(), Model.MatchDate.ToShortTimeString())
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.HiddenFor(m => m.CompetitionGuid)
+                @Html.LabelFor(m => m.CompetitionGuid, new { @class = "col-md-4 control-label" })
+                <div class="col-md-8 form-control-static">
+                    @Model.CompetitionName
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.HiddenFor(m => m.VenueGuid)
+                @Html.LabelFor(m => m.VenueGuid, new { @class = "col-md-4 control-label" })
+                <div class="col-md-8 form-control-static">
+                    @Model.VenueName
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.HiddenFor(m => m.Attendance)
+                @Html.LabelFor(m => m.Attendance, new { @class = "col-md-4 control-label" })
+                <div class="col-md-8 form-control-static">
+                    @Model.Attendance
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Team1Guid, new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+                    @(Html.Kendo().DropDownListFor(m => m.Team1Guid)
+                        .OptionLabel("--Select--")
+                        .HtmlAttributes(new { style = "width:280px" })
+                        .DataTextField("Description")
+                        .DataValueField("Code")
+                        .BindTo(Model.TeamPickerData)
+                    )
+                </div>
+            </div>
+
+            @Html.EditorFor(m => m.Team1Ht)
+            @Html.EditorFor(m => m.Team1Ft)
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Team2Guid, new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+                    @(Html.Kendo().DropDownListFor(m => m.Team2Guid)
+                        .OptionLabel("--Select--")
+                        .HtmlAttributes(new { style = "width:280px" })
+                        .DataTextField("Description")
+                        .DataValueField("Code")
+                        .BindTo(Model.TeamPickerData)
+                    )
+                </div>
+            </div>
+
+            @Html.EditorFor(m => m.Team2Ht)
+            @Html.EditorFor(m => m.Team2Ft)
+
+            <div class="form-group">
+                <div class="col-md-12 text-right">
+                    <a class="btn btn-danger btn-sm" href="@Url.Action("Home", new { id = Model.ShortPrimaryKey })">
+                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-primary btn-sm" name="Command" value="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"></span> Previous
+                    </button>
+
+                    <button type="submit" class="btn btn-success btn-sm" name="Command" value="Save">
+                        Save <span class="glyphicon glyphicon-ok"></span>
+                    </button>
+                </div>
+            </div>
+
+            @Html.ValidationSummary(false, string.Empty, new { @class = "alert alert-danger" })
+        </fieldset>
+    </form>
+</div>
+

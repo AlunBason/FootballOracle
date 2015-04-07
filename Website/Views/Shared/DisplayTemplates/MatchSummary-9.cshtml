@@ -1,0 +1,87 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Matches.BaseMatchViewModel
+
+@{ var showTeamShortNames = ViewData.Any(a => a.Key == "TeamShortNames") && (bool)ViewData["TeamShortNames"] == true; }
+
+@if (!showTeamShortNames && (Model.VersionEntity.VenueGuid != null || Model.VersionEntity.MatchTimeTicks != 0))
+{
+    @*<div class="row small">
+        
+        <span class="col-md-6">
+            @if (Model.VenueGuid != null)
+            {
+                @Html.ApprovalTypeLink(AreaType.Ven, Model.VenueViewModel.ToString(), Model.VenueViewModel.VersionEntity.HeaderKey, Model.VersionEntity.MatchDate, new { @class = "text-success" })
+            }
+        </span>
+        
+        <span class="col-md-6 text-right">
+            @if (Model.VersionEntity.MatchTimeTicks != 0)
+            {
+                @Model.MatchDate.ToDisplayString(false, true)
+            }
+        </span>
+    </div>*@
+}
+
+<div class="row">
+    <span class="col-md-3">
+
+        @if (Model.VenueGuid != null)
+        {
+            @Html.ApprovalTypeLink(AreaType.Ven, Model.VenueViewModel.ToString(), Model.VenueViewModel.VersionEntity.HeaderKey, Model.VersionEntity.MatchDate, new { @class = "text-success" })
+        }
+
+        <small>
+            <small>
+                @if (Model.VersionEntity.MatchTimeTicks != 0)
+                {
+                    @Model.MatchDate.ToDisplayString(false, true)
+                }
+            </small>
+        </small>
+    </span>
+
+    <span class="col-md-4 text-right">
+        @Html.DisplayBadgeWithTeamLink(Model.VersionEntity.Team1, Model.ViewDate, 20, 20, null, true, showTeamShortNames )
+    </span>
+
+    <span class="col-md-1 text-center">
+        @if (Model.VersionEntity.Team1FT != null && Model.VersionEntity.Team2FT != null)
+        {
+            @Html.ApprovalTypeLink(AreaType.Mtc, string.Format("{0} : {1}", Model.VersionEntity.Team1FT, Model.VersionEntity.Team2FT), Model.HeaderKey)
+        }
+        else
+        {
+            @Html.ApprovalTypeLink(AreaType.Mtc, "v", Model.HeaderKey)
+        }
+    </span>
+
+    <span class="col-md-4">
+        @Html.DisplayBadgeWithTeamLink(Model.VersionEntity.Team2, Model.ViewDate, 20, 20, null, false, showTeamShortNames)
+    </span>
+</div>
+
+@if (Model.IsAggregateScoreAvailable)
+{
+    <div class="col-md-3"></div>
+
+    <div>
+        <span class="col-md-9 text-center">
+            @string.Format("Agg. ({0} : {1})", Model.Team1Ft + Model.LinkedMatchViewModel.Team2Ft, Model.Team2Ft + Model.LinkedMatchViewModel.Team1Ft)
+        </span>
+    </div>
+}
+
+@if (Model.Team1Ft == null && Model.Team2Ft == null)
+{
+    Model.Team1ViewModel.SetFormData();
+    Model.Team2ViewModel.SetFormData();
+
+    <div class="col-md-3"></div>
+
+    <div>
+        <span class="col-md-9 text-center">
+            @string.Format("Prediction: ({0:N0} : {1:N0})", Model.HomeVAwayTeam1GoalsPrediction, Model.HomeVAwayTeam2GoalsPrediction)
+        </span>
+    </div>
+}
+

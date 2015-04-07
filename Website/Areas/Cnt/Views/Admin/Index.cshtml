@@ -1,0 +1,17 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Countries.BaseCountryViewModel
+@{
+    ViewBag.Title = "MatchValidation";
+}
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group btn-group-sm">
+            <a class="btn btn-sm btn-default" href="@Url.Action("ManageTeamLookups")">Manage team lookups</a>
+        </div>
+
+    </div>
+</div>
+
+@Html.SelectTab("admin")

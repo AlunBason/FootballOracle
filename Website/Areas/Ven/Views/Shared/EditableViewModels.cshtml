@@ -1,0 +1,58 @@
+﻿@using System.Security.Principal
+
+@model IEnumerable<FootballOracle.Models.ViewModels.Approvable.Venues.BaseVenueViewModel>
+
+<div class="h4 text-center">These are the current versions of this venue:</div>
+
+@foreach (var group in Model.GroupBy(o => o.EffectiveFrom))
+{
+    <table class="table table-condensed small">
+        <thead>
+            <tr>
+                <th colspan="2" class="th-large text-center">
+                    @string.Format("{0} to {1}", group.First().VersionEntity.EffectiveFrom.ToShortString(), @group.First().VersionEntity.EffectiveTo.ToShortString())
+                </th>
+            </tr>
+        </thead>
+
+        @foreach (var item in group)
+        {
+            var isActive = item.VersionEntity.IsActive;
+            var bgClass = isActive ? "bg-success" : "bg-danger";
+
+            <tbody>
+                <tr class="@bgClass">
+                    <td>
+                        @Html.ActionLink(item.ToString(), "Summary", new { pk = item.ShortPrimaryKey })
+                    </td>
+
+                    <td class="text-right">
+                        @if (isActive)
+                        {
+                            <div>
+                                <span>
+                                    @if (User.IsAdmin() && Model.Count() > 1)
+                                    {
+                                        @Html.ActionLink("Delete", "Delete", new { pk = item.ShortPrimaryKey }, new { @class = "btn btn-xs btn-danger", onclick = "return confirm('Are you sure?');" })
+                                    }
+                                </span>
+                                <span>Active</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="btn-group">
+                                @if (item.VersionEntity.ModifiedUserId == User.GetUserId() || User.IsAdmin())
+                                {
+                                    @Html.ActionLink("Delete", "Delete", new { pk = item.ShortPrimaryKey }, new { @class = "btn btn-xs btn-danger", onclick = "return confirm('Are you sure?');" })
+                                }
+
+                                @Html.ActionLink("Activate", "Activate", new { pk = item.ShortPrimaryKey }, new { @class = "btn btn-xs btn-primary" })
+                            </div>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        }
+    </table>
+}

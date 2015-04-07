@@ -1,0 +1,31 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Teams.TeamVersionSummaryViewModel
+
+<div class="well">
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>@ViewBag.Title</legend>
+
+            @Html.EditorFor(m => m.EditorTeamNameNative)
+            @Html.EditorFor(m => m.EditorTeamNameEnglish)
+            @Html.EditorFor(m => m.EditorFullName)
+            @Html.EditorFor(m => m.EditorShortname)
+            @Html.EditorFor(m => m.EditorNickname)
+            @Html.EditorFor(m => m.Country)
+            @Html.EditorFor(m => m.HomeVenue)
+
+            <div class="row form-group">
+                <div class="col-md-12">
+                    @Html.Label("Badge", new { @class = "control-label" })
+
+                    @if(Model.VersionEntity != null && Model.VersionEntity.Resource != null)
+                    {
+                        <img src="@string.Format("data:image/gif;base64,{0}", Model.VersionEntity.Resource.ResourceBytes.ToBase64Image(50,50))" />    
+                    }
+                </div>
+            </div>
+
+            @Html.EditorFor(m => m.WebAddress)
+            @Html.EditorFor(m => m.EffectiveFrom)
+        </fieldset>
+    </form>
+</div>

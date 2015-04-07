@@ -1,0 +1,223 @@
+﻿@using Kendo.Mvc.UI
+@using FootballOracle.Foundation
+@using FootballOracle.Models.Entities
+
+@model FootballOracle.Models.ViewModels.Approvable.Matches.MatchPlayersEventsEditorViewModel
+
+@{
+    ViewBag.Title = "EditEvents";
+}
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Home")">Match summary</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Edit")">Match details</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("EditPlayers", new { tm = 1 })">@string.Format("{0} players", Model.Team1ViewModel.ToString())</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("EditPlayers", new { tm = 2 })">@string.Format("{0} players", Model.Team2ViewModel.ToString())</a>
+            <a class="btn btn-primary btn-xs" href="@Url.Action("EditEvents")">Match events</a>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+
+    <form method="post" class="form-horizontal">
+        <fieldset>
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(m => m.PrimaryKey)
+            @Html.HiddenFor(m => m.HeaderKey)
+            @Html.HiddenFor(m => m.ViewDate)
+
+            <div class="col-md-6">
+
+                <div class="h3">@string.Format("{0} events:", Model.VersionEntity.Team1.ToViewModel(Model.ViewDate).ToString())</div>
+
+                <div>
+                    <table class="table table-condensed table-striped small">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Event</th>
+                                <th>Minutes</th>
+                                <th>Extra minutes</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @{var eventCount1 = Model.Team1MatchEventPersonViewModels.Count(); }
+
+                            @for (int i = 0; i < eventCount1; i++)
+                            {
+                                <tr>
+                                    @Html.HiddenFor(m => m.Team1MatchEventPersonViewModels[i].PrimaryKey)
+                                    @Html.HiddenFor(m => m.Team1MatchEventPersonViewModels[i].PersonPrimaryKey)
+
+                                    <td style="vertical-align: middle;">@Html.DisplayFor(m => m.Team1MatchEventPersonViewModels[i].PersonName)</td>
+
+                                    <td>@Html.EditorFor(m => m.Team1MatchEventPersonViewModels[i].MatchEventInRunningType)</td>
+
+                                    <td>@Html.EditorFor(m => m.Team1MatchEventPersonViewModels[i].Minute)</td>
+
+                                    <td>@Html.EditorFor(m => m.Team1MatchEventPersonViewModels[i].Extra)</td>
+                                </tr>
+                            }
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="h3">@string.Format("{0} events:", Model.VersionEntity.Team2.ToViewModel(Model.ViewDate).ToString())</div>
+
+                <div>
+                    <table class="table table-condensed table-striped small">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Event</th>
+                                <th>Minutes</th>
+                                <th>Extra minutes</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @{var eventCount2 = Model.Team2MatchEventPersonViewModels.Count(); }
+
+                            @for (int i = 0; i < eventCount2; i++)
+                            {
+                                <tr>
+                                    @Html.HiddenFor(m => m.Team2MatchEventPersonViewModels[i].PrimaryKey)
+                                    @Html.HiddenFor(m => m.Team2MatchEventPersonViewModels[i].PersonPrimaryKey)
+
+                                    <td style="vertical-align: middle;">@Html.DisplayFor(m => m.Team2MatchEventPersonViewModels[i].PersonName)</td>
+
+                                    <td>@Html.EditorFor(m => m.Team2MatchEventPersonViewModels[i].MatchEventInRunningType)</td>
+
+                                    <td>@Html.EditorFor(m => m.Team2MatchEventPersonViewModels[i].Minute)</td>
+
+                                    <td>@Html.EditorFor(m => m.Team2MatchEventPersonViewModels[i].Extra)</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <span>Save events</span>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <div class="col-md-6">
+        <form method="post" class="form-horizontal">
+            <fieldset>
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(m => m.PrimaryKey)
+                @Html.HiddenFor(m => m.HeaderKey)
+                @Html.HiddenFor(m => m.ViewDate)
+
+                <table class="table table-condensed table-striped small">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Event</th>
+                            <th>Minutes</th>
+                            <th>Extra minutes</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                @(Html.Kendo().DropDownListFor(m => m.NewTeam1MatchEventPersonViewModel.PersonPrimaryKey)
+                                        .OptionLabel("Not selected")
+                                        .HtmlAttributes(new { style = "width:150px" })
+                                        .DataTextField("Description")
+                                        .DataValueField("Code")
+                                        .BindTo(Model.Team1PersonViewModels)
+                                )
+                            </td>
+
+                            <td>@Html.EditorFor(m => m.NewTeam1MatchEventPersonViewModel.MatchEventInRunningType)</td>
+
+                            <td>@Html.EditorFor(m => m.NewTeam1MatchEventPersonViewModel.Minute)</td>
+
+                            <td>@Html.EditorFor(m => m.NewTeam1MatchEventPersonViewModel.Extra)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-success btn-sm">
+                    <span>@string.Format("Add new {0} event", Model.VersionEntity.Team1.ToViewModel(Model.ViewDate).ToString())</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <form method="post" class="form-horizontal">
+            <fieldset>
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(m => m.PrimaryKey)
+                @Html.HiddenFor(m => m.HeaderKey)
+                @Html.HiddenFor(m => m.ViewDate)
+                <table class="table table-condensed table-striped small">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Event</th>
+                            <th>Minutes</th>
+                            <th>Extra minutes</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                @(Html.Kendo().DropDownListFor(m => m.NewTeam2MatchEventPersonViewModel.PersonPrimaryKey)
+                                        .OptionLabel("Not selected")
+                                        .HtmlAttributes(new { style = "width:150px" })
+                                        .DataTextField("Description")
+                                        .DataValueField("Code")
+                                        .BindTo(Model.Team2PersonViewModels)
+                                )
+                            </td>
+
+                            <td>@Html.EditorFor(m => m.NewTeam2MatchEventPersonViewModel.MatchEventInRunningType)</td>
+
+                            <td>@Html.EditorFor(m => m.NewTeam2MatchEventPersonViewModel.Minute)</td>
+
+                            <td>@Html.EditorFor(m => m.NewTeam2MatchEventPersonViewModel.Extra)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-success btn-sm">
+                    <span>@string.Format("Add new {0} event", Model.VersionEntity.Team2.ToViewModel(Model.ViewDate).ToString())</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@Html.SelectTab("edit")

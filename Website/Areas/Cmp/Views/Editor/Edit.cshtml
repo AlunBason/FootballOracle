@@ -1,0 +1,30 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionEditorViewModel
+
+@{
+    ViewBag.Title = "Edit competition:";
+}
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Summary")">Competition summary</a>
+            <a class="btn btn-primary btn-xs" href="@Url.Action("Edit")">Edit competition</a>
+
+            @if (Model.IsAdmin)
+            {
+                <a class="btn btn-default btn-xs" href="@Url.Action("ManageLookups")">Manage lookups</a>
+                <a class="btn btn-default btn-xs" href="@Url.Action("EditCampaigns")">Edit campaigns</a>
+            }
+        </p>
+
+        @Html.EditorForModel()
+    </div>
+
+    <div class="col-md-6">
+        @Html.Partial("EditableViewModels", Model.EditableViewModels)
+    </div>
+</div>
+
+@Html.SelectTab("edit")

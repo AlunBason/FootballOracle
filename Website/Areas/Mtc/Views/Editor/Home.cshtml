@@ -1,0 +1,166 @@
+﻿@using FootballOracle.Foundation.Interfaces;
+@using FootballOracle.Foundation;
+@using FootballOracle.Models.Entities;
+@using System.Security.Principal
+
+@model FootballOracle.Models.ViewModels.Approvable.Matches.MatchEditorViewModel
+@{
+    ViewBag.Title = "Home";
+}
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            <a class="btn btn-primary btn-xs" href="@Url.Action("Home")">Match summary</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Edit")">Match details</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("EditPlayers", new { tm = 1 })">@string.Format("{0} players", Model.Team1ViewModel.ToString())</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("EditPlayers", new { tm = 2 })">@string.Format("{0} players", Model.Team2ViewModel.ToString())</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("EditEvents")">Match events</a>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-5 text-right">
+                <div class="h3">
+                    @Html.ApprovalTypeLink(AreaType.Tms, Model.Team1ViewModel.ToString(), Model.Team1ViewModel.HeaderKey, Model.ViewDate)
+                </div>
+
+                @foreach (var item in Model.Team1Starters)
+                {
+                    <div>
+                        @Html.PersonMatchEvents(Model.VersionEntity.MatchEvents.Where(e => e.PersonPrimaryKey == item.PersonViewModel.PrimaryKey).ToViewModels(Model.ViewDate))
+                        @Html.ApprovalTypeLink(AreaType.Ppl, item.PersonViewModel.ToString(), item.PersonViewModel.HeaderKey)
+                    </div>
+                }
+
+            </div>
+
+            <div class="col-md-2 text-center">
+
+                @if (Model.VersionEntity.Team1HT != null && Model.VersionEntity.Team2HT != null)
+                {
+                    <div class="h3">
+                        <span>@string.Format("{0} : {1}", Model.VersionEntity.Team1FT, Model.VersionEntity.Team2FT)</span>
+                    </div>
+
+                    <div class="h5">
+                        <span>@string.Format("({0} : {1})", Model.VersionEntity.Team1HT, Model.VersionEntity.Team2HT)</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="h3">
+                        <span>@string.Format("{0} : {1}", Model.VersionEntity.Team1FT, Model.VersionEntity.Team2FT)</span>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-5">
+                <div class="h3">
+                    @Html.ApprovalTypeLink(AreaType.Tms, Model.Team2ViewModel.ToString(), Model.Team2ViewModel.HeaderKey, Model.ViewDate)
+                </div>
+
+                @foreach (var item in Model.Team2Starters)
+                {
+                    <div>
+                        @Html.ApprovalTypeLink(AreaType.Ppl, item.PersonViewModel.ToString(), item.PersonViewModel.HeaderKey)
+                        @Html.PersonMatchEvents(Model.VersionEntity.MatchEvents.Where(e => e.PersonPrimaryKey == item.PersonViewModel.PrimaryKey).ToViewModels(Model.ViewDate))
+                    </div>
+                }
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center h4">Substitues</div>
+
+            <div class="col-md-5 text-right">
+                @foreach (var item in Model.Team1Substitutes)
+                {
+                    <div>
+                        @Html.PersonMatchEvents(Model.VersionEntity.MatchEvents.Where(e => e.PersonPrimaryKey == item.PersonViewModel.PrimaryKey).ToViewModels(Model.ViewDate))
+                        @Html.ApprovalTypeLink(AreaType.Ppl, item.PersonViewModel.ToString(), item.PersonViewModel.HeaderKey)
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-2 text-center"></div>
+
+            <div class="col-md-5">
+                @foreach (var item in Model.Team2Substitutes)
+                {
+                    <div>
+                        @Html.ApprovalTypeLink(AreaType.Ppl, item.PersonViewModel.ToString(), item.PersonViewModel.HeaderKey)
+                        @Html.PersonMatchEvents(Model.VersionEntity.MatchEvents.Where(e => e.PersonPrimaryKey == item.PersonViewModel.PrimaryKey).ToViewModels(Model.ViewDate))
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="h4 text-center">These are the versions of this match:</div>
+
+        @foreach (var group in Model.MatchViewModels.GroupBy(o => o.EffectiveFrom))
+        {
+            <table class="table table-condensed small">
+                <thead>
+                    <tr>
+                        <th colspan="2" class="th-large text-center">
+                            @string.Format("{0} to {1}", group.First().VersionEntity.EffectiveFrom.ToShortString(), @group.First().VersionEntity.EffectiveTo.ToShortString())
+                        </th>
+                    </tr>
+                </thead>
+
+                @foreach (var item in group)
+                {
+                    var isActive = item.VersionEntity.IsActive;
+                    var bgClass = isActive ? "bg-success" : "bg-danger";
+
+                    <tbody>
+                        <tr class="@bgClass">
+                            <td>
+                                @Html.ActionLink(item.ToString(), "Home", new { id = item.ShortPrimaryKey })
+                            </td>
+
+                            <td class="text-right">
+                                @if (isActive)
+                                {
+                                    <div>
+                                        <span>
+                                            @if (User.IsAdmin() && Model.MatchViewModels.Count() > 1)
+                                            {
+                                                @Html.ActionLink("Delete", "Delete", new { pk = item.ShortPrimaryKey }, new { @class = "btn btn-xs btn-danger", onclick = "return confirm('Are you sure?');" })
+                                            }
+                                        </span>
+                                        <span>Active</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Activate", "Activate", new { id = item.ShortPrimaryKey }, new { @class = "btn btn-xs btn-primary" })
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                }
+
+            </table>
+        }
+    </div>
+
+    
+</div>
+
+<br />
+
+<div class="row">
+    
+</div>
+
+@Html.SelectTab("edit")

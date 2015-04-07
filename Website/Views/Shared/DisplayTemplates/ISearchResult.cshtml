@@ -1,0 +1,47 @@
+﻿@model FootballOracle.Foundation.Interfaces.ISearchResult
+
+@{var isCurrent = DateTime.Now._IsBetween(Model.EffectiveFrom, Model.EffectiveTo); }
+
+@if (Model.ParentLinkData != null && Model.IsParentDisplayed)
+{
+    <dd>
+        <small>
+            @Html.ApprovalTypeLink(Model.ParentLinkData.AreaType, Model.ParentLinkData.ToString(), Model.ParentLinkData.HeaderKey, Model.ViewDate, new { @class = "text-success" })
+        </small>
+    </dd>
+}
+
+<dd>
+    @if (Model.ResourceBytes != null)
+    {
+        @Html.BytesToImage(Model.ResourceBytes, 20, 20, string.Empty)
+    }
+
+    <span>
+        @Html.ApprovalTypeLink(Model.MainLinkData.AreaType, Model.MainLinkData.ToString(), Model.MainLinkData.HeaderKey, Model.ViewDate, new { @class = isCurrent ? "text-bigger" : "text-bigger text-muted" })
+    </span>
+
+    @if (Model.ParentLinkData2 != null && Model.IsParentDisplayed)
+    {
+        <span>
+            (@Html.ApprovalTypeLink(Model.ParentLinkData2.AreaType, Model.ParentLinkData2.ToString(), Model.ParentLinkData2.HeaderKey, Model.ViewDate, new { @class = "text-success" }))
+        </span>
+    }
+</dd>
+
+@if (!string.IsNullOrEmpty(Model.WebAddress))
+{
+    <dd><a class="text-success small" href="@Model.WebAddress" target="_blank">@Model.WebAddress</a></dd>
+}
+
+@if (!string.IsNullOrEmpty(Model.Description))
+{
+    <dd class="small">@Model.Description</dd>
+}
+
+@if (!DateTime.Now._IsBetween(Model.EffectiveFrom, Model.EffectiveTo))
+{
+    <dd class="small"><em>@string.Format("{0} to {1}", Model.EffectiveFrom.ToDisplayString(), Model.EffectiveTo.ToDisplayString())</em></dd>
+}
+
+<div style="height:10px;"></div>

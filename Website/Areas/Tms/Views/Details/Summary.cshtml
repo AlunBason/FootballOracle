@@ -1,0 +1,88 @@
+﻿@using FootballOracle.Foundation.Interfaces
+@using FootballOracle.Models.Entities
+@using FootballOracle.Foundation
+@using System.Globalization
+
+@model FootballOracle.Models.ViewModels.Approvable.Teams.TeamSummaryViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' summary", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        @if (Model.SelectedCampaignViewModel != null  && Model.SelectedCampaignViewModel.SelectedCampaignStageViewModel != null && Model.SelectedCampaignViewModel.SelectedCampaignStageViewModel.Entity.IsDefault)
+        {
+            @Html.ToHtmlLeagueTable(Model.SelectedCampaignViewModel, Model.PrimaryKey, Model.ViewDate, 3, true)
+        }
+
+    </div>
+    
+    <div class="col-md-6">
+
+        <table class="table table-striped table-condensed table-hover small">
+            @foreach (var group in Model.CampaignMatchGroups.OrderByDescending(m => m.FirstOrDefault().MatchDate))
+            {
+                <thead>
+                    <tr>
+                        <th class="text-center success" colspan="5">@string.Format("{0} {1}", CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(group.FirstOrDefault().MatchDate.Month), group.FirstOrDefault().MatchDate.Year)</th>
+                    </tr>
+
+                    <tr>
+                        <th>Date</th>
+                        <th>Competition</th>
+                        <th>Opponents</th>
+                        <th>Venue</th>
+                        <th class="text-center">Score</th>
+                    </tr>
+                </thead>
+
+                foreach (var item in group.OrderByDescending(g => g.MatchDate))
+                {
+                    <tbody>
+                        
+                        @if (item.Team1ViewModel.PrimaryKey == Model.PrimaryKey)
+                        {
+                            <tr>
+                                <td>@item.MatchDate.Day.AddOrdinal()</td>
+                                <td>@Html.ApprovalTypeLink(AreaType.Cmp, item.CompetitionViewModel.ToString(), item.CompetitionViewModel.HeaderKey)</td>
+                                <td>@Html.DisplayBadgeWithTeamLink(item.Team2ViewModel.VersionEntity.Team, Model.ViewDate, 20, 20, null)</td>
+                                
+                                <td>
+                                    @if (item.VenueViewModel != null)
+                                    {
+                                        @Html.ApprovalTypeLink(AreaType.Ven, item.VenueViewModel.ToString(), item.VenueViewModel.HeaderKey)
+                                    }
+                                </td>
+                                <td class="text-center">@Html.ApprovalTypeLink(AreaType.Mtc, string.Format("{0} : {1}", item.Team1Ft, item.Team2Ft), item.HeaderKey)</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@item.MatchDate.Day.AddOrdinal()</td>
+                                <td>@Html.ApprovalTypeLink(AreaType.Cmp, item.CompetitionViewModel.ToString(), item.CompetitionViewModel.HeaderKey)</td>
+                                <td>@Html.DisplayBadgeWithTeamLink(item.Team1ViewModel.VersionEntity.Team, Model.ViewDate, 20, 20, null)</td>
+                                
+                                <td>
+                                    @if (item.VenueViewModel != null)
+                                    {
+                                        @Html.ApprovalTypeLink(AreaType.Ven, item.VenueViewModel.ToString(), item.VenueViewModel.HeaderKey)
+                                    }
+                                    
+                                </td>
+
+                                <td class="text-center">@Html.ApprovalTypeLink(AreaType.Mtc, string.Format("{0} : {1}", item.Team2Ft, item.Team1Ft), item.HeaderKey)</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                }
+            }
+        </table>
+    </div>
+</div>
+
+@Html.SelectTab("summary")

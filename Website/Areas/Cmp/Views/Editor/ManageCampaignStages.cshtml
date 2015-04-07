@@ -1,0 +1,84 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionCampaignStagesViewModel
+
+@{
+    ViewBag.Title = "Manage competition campaign stages";
+}
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Summary")">Competition summary</a>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Edit")">Edit competition</a>
+
+            @if (Model.IsAdmin)
+            {
+                <a class="btn btn-default btn-xs" href="@Url.Action("ManageLookups")">Manage lookups</a>
+                <a class="btn btn-primary btn-xs" href="@Url.Action("ManageCampaigns")">Manage campaigns</a>
+            }
+        </p>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="well">
+            <form method="post" class="form-horizontal">
+                <fieldset>
+                    <legend>@string.Format("{0}: {1} to {2}", ViewBag.Title, ((DateTime)Model.ManageCampaignViewModel.StartDate).ToShortDateString(), ((DateTime)Model.ManageCampaignViewModel.EndDate).ToShortDateString())</legend>
+
+                    @Html.AntiForgeryToken()
+
+                    @Html.HiddenFor(m => m.PrimaryKey)
+                    @Html.HiddenFor(m => m.HeaderKey)
+                    @Html.HiddenFor(m => m.SelectedCampaignKey)
+                    @Html.ValidationSummary(false, string.Empty, new { @class = "alert alert-danger" })
+
+                    <table class="table table-condensed table-striped small">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th class="text-center">Stage order</th>
+                                <th class="text-center">Default</th>
+                                <th class="text-center">League</th>
+                                <th class="text-center">Legs</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @{var viewModelCount = Model.ManageCampaignStageViewModels.Count(); }
+
+                            @for (int i = 0; i < viewModelCount; i++)
+                            {
+                                <tr>
+                                    @Html.HiddenFor(m => m.ManageCampaignStageViewModels[i].PrimaryKey)
+                                    @Html.HiddenFor(m => m.ManageCampaignStageViewModels[i].CampaignKey)
+                                    @Html.HiddenFor(m => m.ManageCampaignStageViewModels[i].IsNew)
+
+                                    <td>@Html.EditorFor(m => m.ManageCampaignStageViewModels[i].Description)</td>
+                                    <td class="text-center">@Html.EditorFor(m => m.ManageCampaignStageViewModels[i].StageOrder)</td>
+                                    <td class="text-center">@Html.EditorFor(m => m.ManageCampaignStageViewModels[i].IsDefault)</td>
+                                    <td class="text-center">@Html.EditorFor(m => m.ManageCampaignStageViewModels[i].IsLeague)</td>
+                                    <td class="text-center">@Html.EditorFor(m => m.ManageCampaignStageViewModels[i].LegCount)</td>
+                                    <td>
+                                        @if (!Model.ManageCampaignStageViewModels[i].IsNew)
+                                        {
+                                            <a class="btn btn-success btn-xs" href="@Url.Action("ManageLookupCampaignStages", new { sk = Model.ManageCampaignStageViewModels[i].PrimaryKey.ToShortGuid() })">Manage lookups</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.Partial("_SubmitButtons")
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+@Html.SelectTab("edit")

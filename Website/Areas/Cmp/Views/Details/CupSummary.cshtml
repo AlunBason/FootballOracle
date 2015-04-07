@@ -1,0 +1,115 @@
+﻿@using Kendo.Mvc.UI
+@using FootballOracle.Foundation
+
+@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionCupSummaryViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' summary", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+@{
+    var cupSummaryAction = ViewContext.RouteData.Values["action"].ToString();
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="alert alert-warning text-center h4">@Model.SelectedCampaignViewModel.SelectedCampaignStageViewModel.ToString()</div>
+
+        @if (Model.SelectedCampaignViewModel.SelectedCampaignStageViewModel.Entity.IsLeague)
+        {
+            @Html.ToHtmlLeagueTable(Model.SelectedCampaignViewModel, null, Model.ViewDate, 3, true)
+        }
+        
+        @{
+            
+            var groupedFixtures = Model.SelectedCampaignViewModel.FixtureGroups.Take(1);
+
+            if (groupedFixtures.Any())
+            {
+                <div class="panel">
+
+                    @foreach (var group in groupedFixtures)
+                    {
+                        <div class="panel-heading alert alert-info">@Html.ByDateLink(group.First().MatchDate, null)</div>
+
+                        <div class="panel-body">
+                            <table class="table table-striped table-condensed table-hover">
+
+                                @foreach (var matchViewModel in group)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(m => matchViewModel, "MatchSummary-9")
+                                        </td>
+                                    </tr>
+                                }
+
+                            </table>
+                        </div>
+                    }
+
+                </div>
+            }
+
+            var groupedResults = Model.SelectedCampaignViewModel.SelectedCampaignStageViewModel.ResultGroups;
+
+            if (groupedResults.Any())
+            {
+                <div class="panel">
+
+                    @foreach (var group in groupedResults)
+                    {
+                        <div class="panel-heading alert alert-info text-center">@Html.ByDateLink(group.First().MatchDate, null)</div>
+
+                        <div class="panel-body">
+                            <table class="table table-striped table-condensed table-hover">
+
+                                @foreach (var matchViewModel in group)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(m => matchViewModel, "MatchSummary-9")
+                                        </td>
+                                    </tr>
+                                }
+
+                            </table>
+                        </div>
+            
+                    }
+                </div>
+            }
+        }
+    </div>
+
+    <div class="col-md-3">
+        <ul class="nav nav-pills nav-stacked">
+            @foreach (var item in Model.SelectedCampaignViewModel.CampaignStageViewModels)
+            {
+                var className = Model.SelectedCampaignViewModel.SelectedCampaignStageViewModel.Entity.PrimaryKey == item.Entity.PrimaryKey ? "active" : string.Empty;
+                
+                <li role="presentation" class="@className">
+                    <a href="@Url.Action("CupSummary", new { hk = Model.ShortHeaderKey, dt = Model.ViewDate.ToUrlString(), sk = item.Entity.PrimaryKey.ToShortGuid() })">
+                        @item.ToString()
+                    </a>
+                </li>
+            }
+        </ul>
+        
+    </div>
+</div>
+
+@Html.SelectTab("summary")
+
+<script>
+    function selectedStageTypeOnSelect(e) {
+        var pickerCode = this.dataItem(e.item.index()).Code;
+
+        var redirect = '@Url.Action(cupSummaryAction, new { dt = Model.ViewDate.ToUrlString(), st = "__st__" })';
+        redirect = redirect.replace("__st__", pickerCode);
+
+        window.location.href = redirect;
+    };
+</script>
+
+

@@ -1,0 +1,414 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{79BEE1EA-B426-4C96-A2E7-44371DBB4E48}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FootballOracle.Models</RootNamespace>
+    <AssemblyName>FootballOracle.Models</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.1.0\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\Connector NET 6.9.3\Assemblies\v4.5\MySql.Data.Entity.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\HideLabelAttribute.cs" />
+    <Compile Include="DbContexts\Pf\PfDbInitialiser.cs" />
+    <Compile Include="Entities\Campaign.cs" />
+    <Compile Include="Entities\CampaignStage.cs" />
+    <Compile Include="Entities\CompetitionV.cs" />
+    <Compile Include="Entities\Competition.cs" />
+    <Compile Include="Entities\LookupCampaignStage.cs" />
+    <Compile Include="Entities\Resource.cs" />
+    <Compile Include="Entities\LookupVenue.cs" />
+    <Compile Include="Entities\LookupPerson.cs" />
+    <Compile Include="Entities\MatchEvent.cs" />
+    <Compile Include="Entities\Person.cs" />
+    <Compile Include="Entities\Country.cs" />
+    <Compile Include="Entities\PersonV.cs" />
+    <Compile Include="Entities\LookupCompetition.cs" />
+    <Compile Include="Entities\LookupMatch.cs" />
+    <Compile Include="Entities\LookupTeam.cs" />
+    <Compile Include="Entities\Match.cs" />
+    <Compile Include="Entities\MatchV.cs" />
+    <Compile Include="Entities\Organisation.cs" />
+    <Compile Include="Entities\OrganisationV.cs" />
+    <Compile Include="Entities\Team.cs" />
+    <Compile Include="Entities\TeamName.cs" />
+    <Compile Include="Entities\TeamV.cs" />
+    <Compile Include="Entities\Venue.cs" />
+    <Compile Include="Entities\VenueV.cs" />
+    <Compile Include="DbContexts\Membership\MembershipDbInitialiser.cs" />
+    <Compile Include="Membership\ApplicationRoleManager.cs" />
+    <Compile Include="Membership\ApplicationUserManager.cs" />
+    <Compile Include="Membership\SignInHelper.cs" />
+    <Compile Include="Migrations\Membership\201407161003208_InitialDatabaseCreation.cs" />
+    <Compile Include="Migrations\Membership\201407161003208_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201407161003208_InitialDatabaseCreation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Membership\Configuration.cs" />
+    <Compile Include="Migrations\Pf\201409050555180_InitialDatabaseCreation.cs" />
+    <Compile Include="Migrations\Pf\201409050555180_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201409050555180_InitialDatabaseCreation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\201410131402432_CompetitionRank.cs" />
+    <Compile Include="Migrations\Pf\201410131402432_CompetitionRank.Designer.cs">
+      <DependentUpon>201410131402432_CompetitionRank.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\201411040745435_MatchVPredictionMigration.cs" />
+    <Compile Include="Migrations\Pf\201411040745435_MatchVPredictionMigration.Designer.cs">
+      <DependentUpon>201411040745435_MatchVPredictionMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\201411041824076_TeamNameMigration.cs" />
+    <Compile Include="Migrations\Pf\201411041824076_TeamNameMigration.Designer.cs">
+      <DependentUpon>201411041824076_TeamNameMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\201411061247063_TeamVTeamNameNotRequiredMigration.cs" />
+    <Compile Include="Migrations\Pf\201411061247063_TeamVTeamNameNotRequiredMigration.Designer.cs">
+      <DependentUpon>201411061247063_TeamVTeamNameNotRequiredMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\201411101504394_MatchVStageTypeMigration.cs" />
+    <Compile Include="Migrations\Pf\201411101504394_MatchVStageTypeMigration.Designer.cs">
+      <DependentUpon>201411101504394_MatchVStageTypeMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\201411241507296_CompetitionVCompetitionTypeMigration.cs" />
+    <Compile Include="Migrations\Pf\201411241507296_CompetitionVCompetitionTypeMigration.Designer.cs">
+      <DependentUpon>201411241507296_CompetitionVCompetitionTypeMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\201412181423133_RemoveMatchVPredictionDataMigration.cs" />
+    <Compile Include="Migrations\Pf\201412181423133_RemoveMatchVPredictionDataMigration.Designer.cs">
+      <DependentUpon>201412181423133_RemoveMatchVPredictionDataMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\201502200759276_CampaignStageMigration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Migrations\Pf\201502200759276_CampaignStageMigration.Designer.cs">
+      <DependentUpon>201502200759276_CampaignStageMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\201502201459230_CampaignStageMigration1.cs" />
+    <Compile Include="Migrations\Pf\201502201459230_CampaignStageMigration1.Designer.cs">
+      <DependentUpon>201502201459230_CampaignStageMigration1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\201503060822525_LookupCampaignMigration.cs" />
+    <Compile Include="Migrations\Pf\201503060822525_LookupCampaignMigration.Designer.cs">
+      <DependentUpon>201503060822525_LookupCampaignMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\201503121352347_RemoveMatchAndStageTypeMigration.cs" />
+    <Compile Include="Migrations\Pf\201503121352347_RemoveMatchAndStageTypeMigration.Designer.cs">
+      <DependentUpon>201503121352347_RemoveMatchAndStageTypeMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Pf\Configuration.cs" />
+    <Compile Include="DbContexts\Pf\PfDbContext.cs" />
+    <Compile Include="Entities\CountryV.cs" />
+    <Compile Include="Membership\ApplicationUser.cs" />
+    <Compile Include="DbContexts\Membership\MembershipDbContext.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.CampaignStage.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.LookupCampaignStage.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.TeamName.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.VenueV.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.Venue.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.TeamV.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.Team.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.Resource.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.PersonV.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.Person.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.OrganisationV.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.Organisation.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.MatchV.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.MatchEvent.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.Match.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.LookupVenue.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.LookupTeam.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.LookupPerson.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.LookupMatch.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.LookupCompetition.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.CountryV.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.Country.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.CompetitionV.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.Competition.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.Campaign.cs" />
+    <Compile Include="RepositoryProviders\Interfaces\IRepositoryProvider.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.CampaignStage.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.LookupCampaignStage.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.TeamName.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.VenueV.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.Venue.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.TeamV.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.Team.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.Resource.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.PersonV.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.Person.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.OrganisationV.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.Organisation.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.MatchV.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.MatchEvent.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.Match.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.LookupMatch.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.LookupPerson.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.LookupTeam.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.LookupVenue.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.LookupCompetition.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.CountryV.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.Country.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.CompetitionV.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.Competition.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.Campaign.cs" />
+    <Compile Include="RepositoryProviders\RepositoryProvider.cs" />
+    <Compile Include="ViewModels\Account\AccountViewModels.cs" />
+    <Compile Include="ViewModels\Account\AdminViewModel.cs" />
+    <Compile Include="ViewModels\Account\ManageViewModels.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionLookupCampaignStagesViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionCampaignStagesViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionCupSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionManageCampaignsViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionUpdatePredictionMatchesViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Countries\CountryManageTeamLookupsViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Matches\MatchPredictorViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Matches\MatchProgressViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Teams\TeamProgressViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Teams\TeamStatisticsViewModel.cs" />
+    <Compile Include="ViewModels\Base\BaseApprovableViewModel.cs" />
+    <Compile Include="ViewModels\Base\BaseViewModel.cs" />
+    <Compile Include="Foundation\Interfaces\_IApprovableEntityExtensions.cs" />
+    <Compile Include="Foundation\Interfaces\_IHeaderEntityExtensions.cs" />
+    <Compile Include="Foundation\Interfaces\IApprovableViewModel.cs" />
+    <Compile Include="ViewModels\Standard\Admin\DeleteAndImportFixturesViewModel.cs" />
+    <Compile Include="ViewModels\Standard\Campaigns\BaseCampaignViewModel.cs" />
+    <Compile Include="ViewModels\Standard\Campaigns\BaseCampaignStageViewModel.cs" />
+    <Compile Include="ViewModels\Standard\Campaigns\ImportCampaignViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\BaseCompetitionViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionCampaignsViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionEditorViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionFormViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionImportViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionMatchesViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionMatchValidationViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionPlayersViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionStandingsViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionVersionSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Competitions\CompetitionManageLookupsViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Countries\BaseCountryViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Countries\CountryOrganisationsViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Countries\CountryTeamsViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Countries\CountryVenuesViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Countries\CountryEditorViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Countries\CountryVersionSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Matches\BaseMatchViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Matches\MatchEditorViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Matches\MatchEventPersonViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Matches\MatchHeadToHeadViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Matches\MatchPersonViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Matches\MatchPlayersEditorViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Matches\MatchPlayersEventsEditorViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Matches\MatchSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Organisations\BaseOrganisationViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Organisations\OrganisationChildOrganisationsViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Organisations\OrganisationCompetitionsViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Organisations\OrganisationCountriesViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Organisations\OrganisationEditorViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Organisations\OrganisationVersionSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\People\BasePersonViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\People\PersonEditorViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\People\PersonSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\People\PersonVersionSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Teams\BaseTeamViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Teams\TeamEditorViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Teams\TeamPlayersViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Teams\TeamSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Teams\TeamVersionSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Teams\TeamManageLookupsViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Teams\TeamVersionsViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Venues\BaseVenueViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Venues\VenueEditorViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Venues\VenueSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Approvable\Venues\VenueVersionSummaryViewModel.cs" />
+    <Compile Include="Foundation\ViewModels\_BreadcrumbViewModel.Extensions.cs" />
+    <Compile Include="ViewModels\Standard\Charts\PositionDateData.cs" />
+    <Compile Include="ViewModels\Standard\HomeViewModel.cs" />
+    <Compile Include="ViewModels\Standard\ImportMatchDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Standard\InformationItemViewModel.cs" />
+    <Compile Include="ViewModels\Standard\LeagueTableItemViewModel.cs" />
+    <Compile Include="ViewModels\Standard\LookupCompetitionViewModel.cs" />
+    <Compile Include="ViewModels\Standard\LookupTeamViewModel.cs" />
+    <Compile Include="ViewModels\Standard\ManageLookupCampaignStageViewModel.cs" />
+    <Compile Include="ViewModels\Standard\ManageCampaignStageViewModel.cs" />
+    <Compile Include="ViewModels\Standard\ManageCampaignViewModel.cs" />
+    <Compile Include="ViewModels\Standard\MatchesByDateViewModel.cs" />
+    <Compile Include="ViewModels\Standard\MatchEventViewModel.cs" />
+    <Compile Include="ViewModels\Standard\PersonMatchEventCountViewModel.cs" />
+    <Compile Include="ViewModels\Standard\PersonTableItemViewModel.cs" />
+    <Compile Include="ViewModels\Standard\PredictorDataViewModel.cs" />
+    <Compile Include="ViewModels\Standard\ResultSpreadViewModel.cs" />
+    <Compile Include="ViewModels\Standard\StatisticItemViewModel.cs" />
+    <Compile Include="ViewModels\Standard\TableWithResultsViewModel.cs" />
+    <Compile Include="ViewModels\Standard\TeamLookupsViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Foundation\Foundation.csproj">
+      <Project>{c0177f3c-0be3-4720-b430-67c381f0e71e}</Project>
+      <Name>Foundation</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\Membership\201407161003208_InitialDatabaseCreation.resx">
+      <DependentUpon>201407161003208_InitialDatabaseCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201409050555180_InitialDatabaseCreation.resx">
+      <DependentUpon>201409050555180_InitialDatabaseCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201410131402432_CompetitionRank.resx">
+      <DependentUpon>201410131402432_CompetitionRank.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201411040745435_MatchVPredictionMigration.resx">
+      <DependentUpon>201411040745435_MatchVPredictionMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201411041824076_TeamNameMigration.resx">
+      <DependentUpon>201411041824076_TeamNameMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201411061247063_TeamVTeamNameNotRequiredMigration.resx">
+      <DependentUpon>201411061247063_TeamVTeamNameNotRequiredMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201411101504394_MatchVStageTypeMigration.resx">
+      <DependentUpon>201411101504394_MatchVStageTypeMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201411241507296_CompetitionVCompetitionTypeMigration.resx">
+      <DependentUpon>201411241507296_CompetitionVCompetitionTypeMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201412181423133_RemoveMatchVPredictionDataMigration.resx">
+      <DependentUpon>201412181423133_RemoveMatchVPredictionDataMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201502200759276_CampaignStageMigration.resx">
+      <DependentUpon>201502200759276_CampaignStageMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201502201459230_CampaignStageMigration1.resx">
+      <DependentUpon>201502201459230_CampaignStageMigration1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201503060822525_LookupCampaignMigration.resx">
+      <DependentUpon>201503060822525_LookupCampaignMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Pf\201503121352347_RemoveMatchAndStageTypeMigration.resx">
+      <DependentUpon>201503121352347_RemoveMatchAndStageTypeMigration.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

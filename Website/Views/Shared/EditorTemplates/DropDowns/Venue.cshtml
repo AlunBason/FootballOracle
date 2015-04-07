@@ -1,0 +1,25 @@
+﻿@model Guid?
+
+<div class="row form-group">
+    <div class="col-md-12">
+
+        @Html.LabelForModel(new { @class = "control-label" })
+
+        <div>
+            @(Html.Kendo().DropDownListFor(m => m)
+                .OptionLabel("--None--")
+                .HtmlAttributes(new { style = "width:334px" })
+                .DataTextField("Description")
+                .DataValueField("Code")
+                .Enable(!ViewData.ModelMetadata.IsReadOnly)
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("GetVenueCodePickerData", "Json", new { @area = string.Empty });
+                    });
+                })
+            )
+        </div>
+    </div>
+</div>

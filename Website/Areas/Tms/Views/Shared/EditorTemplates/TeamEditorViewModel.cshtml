@@ -1,0 +1,104 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Teams.TeamEditorViewModel
+
+<div class="well">
+    <form method="post" class="form-horizontal">
+        <fieldset>
+            <legend>@ViewBag.Title</legend>
+
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(false, string.Empty, new { @class = "alert alert-danger" })
+
+            @Html.EditorFor(m => m.EditorTeamNameNative)
+            @Html.EditorFor(m => m.EditorTeamNameEnglish)
+            @Html.EditorFor(m => m.EditorFullName)
+            @Html.EditorFor(m => m.EditorShortname)
+            @Html.EditorFor(m => m.EditorNickname)
+
+            <div class="row form-group">
+                <div class="col-md-12">
+
+                    @Html.LabelFor(m => m.CountryGuid, new { @class = "control-label" })
+
+                    <div>
+                        @(Html.Kendo().DropDownListFor(m => m.CountryGuid)
+                            .OptionLabel("--None--")
+                            .HtmlAttributes(new { style = "width:334px" })
+                            .DataTextField("Description")
+                            .DataValueField("Code")
+                            .Enable(!ViewData.ModelMetadata.IsReadOnly)
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetCountryCodePickerData", "Json", new { @area = string.Empty });
+                                });
+                            })
+                        )
+                    </div>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-md-12">
+
+                    @Html.LabelFor(m => m.HomeVenueGuid,  new { @class = "control-label" })
+
+                    <div>
+                        @(Html.Kendo().DropDownListFor(m => m.HomeVenueGuid)
+                            .OptionLabel("--None--")
+                            .HtmlAttributes(new { style = "width:334px" })
+                            .DataTextField("Description")
+                            .DataValueField("Code")
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetCascadeVenueCodePickerData", "Json", new { @area = string.Empty }).Data("filterVenues");
+                                })
+                                .ServerFiltering(true);
+                            })
+                            .Enable(false)
+                            .AutoBind(false)
+                            .CascadeFrom("CountryGuid")
+                        )
+                        <script>
+                            function filterVenues() {
+                                return {
+                                    countryGuidString: $("#CountryGuid").val()
+                                };
+                            }
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                
+                <div class="col-md-12">
+
+                    @Html.Label("Badge", new { @class = "control-label" })
+
+                    <div>
+                        @if(Model.VersionEntity != null && Model.VersionEntity.Resource != null)
+                        {
+                            <img src="@string.Format("data:image/gif;base64,{0}", Model.VersionEntity.Resource.ResourceBytes.ToBase64Image(50,50))" />    
+                        }
+                        @Html.Kendo().Upload().Multiple(false).Name("imageData")
+                    </div>
+                </div>
+            </div>
+
+            @Html.EditorFor(m => m.WebAddress)
+            @Html.EditorFor(m => m.EffectiveFrom)
+
+            @Html.HiddenFor(m => m.PrimaryKey)
+            @Html.HiddenFor(m => m.HeaderKey)
+            @Html.HiddenFor(m => m.ViewDate)
+            @Html.HiddenFor(m => m.EffectiveTo)
+            @Html.HiddenFor(m => m.ResourceGuid)
+
+            @Html.Partial("_SubmitButtons")
+        </fieldset>
+    </form>
+</div>

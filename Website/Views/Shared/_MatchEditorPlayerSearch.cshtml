@@ -1,0 +1,52 @@
+﻿@using FootballOracle.Models.ViewModels.Approvable.Matches
+
+@model MatchPlayersEditorViewModel
+
+<br />
+
+<div>
+    <form method="post" class="form-horizontal">
+        <fieldset>
+
+            <table class="table table-condensed table-striped small">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Position</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.PrimaryKey)
+                    @Html.HiddenFor(m => m.HeaderKey)
+                    @Html.HiddenFor(m => m.ViewDate)
+                    @Html.HiddenFor(m => m.TeamNumber)
+
+                    @for (int i = 0; i < Model.NewMatchPersonViewModels.Count(); i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor(m => m.NewMatchPersonViewModels[i].PersonGuid)
+
+                            <td style="vertical-align: middle;">@Html.DisplayFor(m => m.NewMatchPersonViewModels[i].PersonName)</td>
+
+                            <td>@Html.EditorFor(m => m.NewMatchPersonViewModels[i].PositionType)</td>
+
+                            <td>@Html.EditorFor(m => m.NewMatchPersonViewModels[i].MatchEventStartType)</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </fieldset>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-success btn-sm">
+                <span>Add players</span>
+            </button>
+        </div>
+
+    </form>
+</div>

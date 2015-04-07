@@ -1,0 +1,73 @@
+﻿@using Kendo.Mvc.UI
+
+@model FootballOracle.Models.ViewModels.Approvable.Matches.MatchPredictorViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' progress", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+<div class="row col-md-12">
+    <table class="table text-center">
+        <thead>
+            <tr>
+                <th></th>
+                <th class="text-center">@Html.ApprovalTypeLink(Model.Team1ViewModel)</th>
+                <th class="text-center">@Html.ApprovalTypeLink(Model.Team2ViewModel)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="2" style="vertical-align: middle;" class="h3">Overall</td>
+
+                <td>
+                    <div class="h4">Form</div>
+                    <div>@string.Format("{0:P0}", Model.Team1ViewModel.LeagueForm)</div>
+                </td>
+
+                <td>
+                    <div class="h4">Form</div>
+                    <div>@string.Format("{0:P0}", Model.Team2ViewModel.LeagueForm)</div>
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <div class="h4">Goals index</div>
+                    <div title="@string.Format("{0:N2}", Model.OverallTeam1GoalsPrediction)">@string.Format("{0:N0}", Model.OverallTeam1GoalsPrediction)</div>
+                </td>
+
+                <td>
+                    <div class="h4">Goals index</div>
+                    <div title="@string.Format("{0:N2}", Model.OverallTeam2GoalsPrediction)">@string.Format("{0:N0}", Model.OverallTeam2GoalsPrediction)</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td rowspan="2" style="vertical-align: middle;" class="h3">Home v Away</td>
+
+                <td>
+                    <div class="h4">Home form</div>
+                    <div>@string.Format("{0:P0}", Model.Team1ViewModel.HomeLeagueForm)</div>
+                </td>
+
+                <td>
+                    <div class="h4">Away Form</div>
+                    <div>@string.Format("{0:P0}", Model.Team1ViewModel.AwayLeagueForm)</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="h4">Home goals index</div>
+                    <div title="@string.Format("{0:N2}", Model.HomeVAwayTeam1GoalsPrediction)">@string.Format("{0:N0}", Model.HomeVAwayTeam1GoalsPrediction)</div>
+                </td>
+
+                <td>
+                    <div class="h4">Away goals index</div>
+                    <div title="@string.Format("{0:N2}", Model.HomeVAwayTeam2GoalsPrediction)">@string.Format("{0:N0}", Model.HomeVAwayTeam2GoalsPrediction)</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+@Html.SelectTab("predictor")

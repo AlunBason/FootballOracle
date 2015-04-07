@@ -1,0 +1,58 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Organisations.BaseOrganisationViewModel
+
+@Html.Partial("_Breadcrumbs", Model.Breadcrumbs)
+
+<div class="row">
+    <div class="col-md-12">
+        <div><span class="h1"> @Model.VersionEntity.OrganisationName</span></div>
+        
+        @if (!string.IsNullOrEmpty(Model.VersionEntity.WebAddress))
+        {
+            <div><a class="text-success" href="@Model.VersionEntity.WebAddress" target="_blank">@Model.VersionEntity.WebAddress</a></div>
+        }
+        <div class="lead">@Model.VersionEntity.OrganisationDescription</div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.WebAddress))
+        {
+            <h5>
+                <a class="text-success" href="@Model.WebAddress" target="_blank">@Model.WebAddress</a>
+            </h5>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+
+            @if (Model.HasChildCountries)
+            {
+                <li id="countries">
+                    <a href="@Url.Action("Countries", "Details")">Countries</a>
+                </li>
+            }
+
+            @if (Model.HasChildCompetitions)
+            {
+                <li id="competitions">
+                    <a href="@Url.Action("Competitions", "Details")">Competitions</a>
+                </li>
+            }
+
+            @if (Model.HasChildOrganisations)
+            {
+                <li id="organisations">
+                    <a href="@Url.Action("Organisations", "Details")">Organisations</a>
+                </li>    
+            }
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li id="edit">
+                    <a href="@Url.Action("Summary", "Editor", new { pk = Model.ShortPrimaryKey })">Edit</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<br />

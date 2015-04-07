@@ -1,0 +1,46 @@
+﻿@using FootballOracle.Foundation.Interfaces
+@using FootballOracle.Models.Entities
+@using FootballOracle.Foundation
+@using System.Globalization
+
+@model FootballOracle.Models.ViewModels.Approvable.Teams.TeamProgressViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' summary", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="chart-wrapper">
+            @(Html.Kendo().Chart(Model.TeamPositionChartData)
+                .Name("chart")
+                .Title("League positions")
+                .DataSource(d => d.Group(g => g.Add(m => m.GroupData.Description)))
+                .Series(s => s.Line(m => m.Position).Tooltip(t => t.Template("#= dataItem.Tooltip #")).Name("#= group.value #"))
+                .Legend(l => l.Visible(false))
+                .ChartArea(chartArea => chartArea.Background("transparent"))
+                .SeriesDefaults(seriesDefaults => seriesDefaults.Line().Style(ChartLineStyle.Smooth))
+                .CategoryAxis(axis => axis
+                    .Categories(m => m.DateValue)
+                    .Date()
+                        .Min(Model.TeamPositionChartData.Min(m => m.DateValue))
+                        .Max(Model.TeamPositionChartData.Max(m => m.DateValue))
+                        .Labels(l => l.Step(14).Format("d MMM").Rotation(-45))
+                    .BaseUnit(ChartAxisBaseUnit.Days)
+                    .MajorGridLines(m => m.Visible(false))
+                    .MinorGridLines(m => m.Visible(false))
+                )
+                .ValueAxis(axis => axis
+                    .Numeric().Min(1).Max(Model.TeamCount).Labels(true).Reverse().MajorUnit(1)
+                            .AxisCrossingValue(Model.TeamCount)
+                    .Line(line => line.Visible(true))
+                )
+                .Tooltip(tooltip => tooltip
+                    .Visible(true)
+                )
+            )
+        </div>
+    </div>
+</div>
+
+@Html.SelectTab("progress")

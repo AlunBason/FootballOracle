@@ -1,0 +1,98 @@
+﻿@using Kendo.Mvc.UI
+
+@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionLeagueSummaryViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' league summary", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+@if (Model.SelectedCampaignViewModel != null)
+{
+    <div class="row col-md-12">
+        <a class="btn btn-xs @(Model.ViewType == 3 ? "btn-primary" : "btn-default")" href="@Url.Action("LeagueSummary", new { dt = Model.ViewDate.ToUrlString(), vt = 3 })">All</a>
+        <a class="btn btn-xs @(Model.ViewType == 1 ? "btn-primary" : "btn-default")" href="@Url.Action("LeagueSummary", new { dt = Model.ViewDate.ToUrlString(), vt = 1 })">Home</a>
+        <a class="btn btn-xs @(Model.ViewType == 2 ? "btn-primary" : "btn-default")" href="@Url.Action("LeagueSummary", new { dt = Model.ViewDate.ToUrlString(), vt = 2 })">Away</a>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            @Html.ToHtmlLeagueTable(Model.SelectedCampaignViewModel, null, Model.ViewDate, Model.ViewType, true)
+        </div>
+
+        <div class="col-md-6">
+            
+            @{
+                var groupedResults = Model.SelectedCampaignViewModel.SelectedCampaignStageViewModel.ResultGroups.Take(1);
+
+                if (groupedResults.Any())
+                {
+                    <div class="panel">
+                        <div class="text-center h4">Latest results</div>
+
+                        @foreach (var group in groupedResults)
+                        {
+                            <div class="panel-heading alert alert-info text-center">@Html.ByDateLink(group.First().MatchDate, null)</div>
+
+                            <div class="panel-body">
+                                <table class="table table-striped table-condensed table-hover">
+
+                                    @foreach (var matchViewModel in group)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(m => matchViewModel, "MatchSummary-6")
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+                            </div>
+                        }
+
+                    </div>
+                }
+            }
+
+            @{var groupedFixtures = Model.SelectedCampaignViewModel.SelectedCampaignStageViewModel.FixtureGroups.Take(1); }
+
+            @if (groupedFixtures.Any())
+            {
+                <div class="panel">
+                    <div class="text-center h4">Next fixtures</div>
+
+                    @foreach (var group in groupedFixtures)
+                    {
+                        <div class="panel-heading alert alert-info text-center">@Html.ByDateLink(group.First().MatchDate, null)</div>
+
+                        <div class="panel-body">
+                            <table class="table table-striped table-condensed table-hover">
+
+                                @foreach (var matchViewModel in group)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(m => matchViewModel, "MatchSummary-6")
+                                        </td>
+                                    </tr>
+                                }
+
+                            </table>
+                        </div>
+                    }
+
+                </div>
+            }
+        </div>
+    </div>    
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12 alert alert-info">
+            @string.Format("No matches found.")
+        </div>
+    </div>
+}
+
+@Html.SelectTab("summary")
+

@@ -1,0 +1,108 @@
+﻿@model FootballOracle.Models.ViewModels.Approvable.Competitions.CompetitionMatchesViewModel
+
+@{ ViewBag.Title = string.Format("'{0}' matches", Model.ToString()); }
+
+@Html.DisplayForModel()
+
+@if (Model.SelectedCampaignViewModel != null)
+{
+    <div class="row">
+        <div class="col-md-6">
+
+            @if (Model.SelectedCampaignViewModel.ResultMatchViewModels.Any())
+            {
+                <div>
+                    <ul class="pagination pagination-sm">
+                        <li class="@(Model.ResultsPage == 1 ? "disabled" : string.Empty)">@Html.ActionLink("<<", "Matches", new { dt = Model.ViewDate.ToUrlString(), rp = 1, fp = Model.FixturesPage })</li>
+                        <li class="@(Model.ResultsPage == 1 ? "disabled" : string.Empty)">@Html.ActionLink("<", "Matches", new { dt = Model.ViewDate.ToUrlString(), rp = Model.ResultsPage - 1, fp = Model.FixturesPage })</li>
+                        <li><a href="#">@string.Format("Results: Page {0} of {1}", Model.ResultsPage, Model.SelectedCampaignViewModel.ResultsPages)</a></li>
+                        <li class="@(Model.ResultsPage == Model.SelectedCampaignViewModel.ResultsPages ? "disabled" : string.Empty)">@Html.ActionLink(">", "Matches", new { dt = Model.ViewDate.ToUrlString(), rp = Model.ResultsPage + 1, fp = Model.FixturesPage })</li>
+                        <li class="@(Model.ResultsPage == Model.SelectedCampaignViewModel.ResultsPages ? "disabled" : string.Empty)">@Html.ActionLink(">>", "Matches", new { dt = Model.ViewDate.ToUrlString(), rp = Model.SelectedCampaignViewModel.ResultsPages, fp = Model.FixturesPage })</li>
+                    </ul>
+                </div>
+            }
+
+            <div class="panel">
+
+                @{ var groupedResults = Model.SelectedCampaignViewModel.ResultGroups.Skip((Model.ResultsPage - 1) * Model.SelectedCampaignViewModel.ResultGroupsPerPage).Take(Model.SelectedCampaignViewModel.ResultGroupsPerPage); }
+
+                @foreach (var group in groupedResults)
+                {
+                    <div class="panel-heading alert alert-info">@Html.ByDateLink(group.First().MatchDate, null)</div>
+
+                    <div class="panel-body">
+                        <table class="table table-striped table-condensed table-hover">
+
+                            @foreach (var matchViewModel in group)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(m => matchViewModel, "MatchSummary-6")
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            @if (Model.SelectedCampaignViewModel.FixtureMatchViewModels.Any())
+            {
+                <div class="text-right">
+                    <ul class="pagination pagination-sm">
+                        <li class="@(Model.FixturesPage == 1 ? "disabled" : string.Empty)">@Html.ActionLink("<<", "Matches", new { dt = Model.ViewDate.ToUrlString(), rp = Model.ResultsPage, fp = 1 })</li>
+                        <li class="@(Model.FixturesPage == 1 ? "disabled" : string.Empty)">@Html.ActionLink("<", "Matches", new { dt = Model.ViewDate.ToUrlString(), rp = Model.ResultsPage, fp = Model.FixturesPage - 1 })</li>
+                        <li><a href="#">@string.Format("Fixtures: Page {0} of {1}", Model.FixturesPage, Model.SelectedCampaignViewModel.FixturesPages)</a></li>
+                        <li class="@(Model.FixturesPage == Model.SelectedCampaignViewModel.FixturesPages ? "disabled" : string.Empty)">@Html.ActionLink(">", "Matches", new { dt = Model.ViewDate.ToUrlString(), rp = Model.ResultsPage, fp = Model.FixturesPage + 1 })</li>
+                        <li class="@(Model.FixturesPage == Model.SelectedCampaignViewModel.FixturesPages ? "disabled" : string.Empty)">@Html.ActionLink(">>", "Matches", new { dt = Model.ViewDate.ToUrlString(), rp = Model.ResultsPage, fp = Model.SelectedCampaignViewModel.FixturesPages })</li>
+                    </ul>
+                </div>
+            }
+
+            <div class="panel">
+
+                @{ var groupedFixtures = Model.SelectedCampaignViewModel.FixtureGroups.Skip((Model.FixturesPage - 1) * Model.SelectedCampaignViewModel.FixtureGroupsPerPage).Take(Model.SelectedCampaignViewModel.FixtureGroupsPerPage); }
+
+                @foreach (var group in groupedFixtures)
+                {
+                    <div class="panel-heading alert alert-info">@Html.ByDateLink(group.First().MatchDate, null)</div>
+
+                    <div class="panel-body">
+                        <table class="table table-striped table-condensed table-hover">
+
+                            @foreach (var matchViewModel in group)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(m => matchViewModel, "MatchSummary-6")
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                }
+
+            </div>
+           
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="row col-md-12 alert alert-danger">
+        <span style="vertical-align: middle;">
+            @string.Format("No campaigns found for {0}.", @Model.ViewDate.ToShortDateString())
+        </span>
+        @Html.ActionLink("Set date to today", "Matches", new { dt = string.Empty }, new { @class = "btn btn-xs btn-danger" })
+    </div>
+}
+@Html.SelectTab("matches")
+
