@@ -72,6 +72,8 @@ namespace FootballOracle.Website.Areas.Tms.Controllers
 
             if (viewModel.SelectedCampaignViewModel != null)
             {
+                viewModel.SelectedCampaignViewModel.SetCampaignStages(3);
+
                 var teamPositionChartData = new List<PositionDateData>();
                 var teamKeys = new[] { viewModel.HeaderKey };
                 var results = viewModel.SelectedCampaignViewModel.ResultMatchViewModels;

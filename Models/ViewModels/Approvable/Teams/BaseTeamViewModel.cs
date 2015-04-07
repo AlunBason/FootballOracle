@@ -1,4 +1,7 @@
-﻿using FootballOracle.Foundation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FootballOracle.Foundation;
 using FootballOracle.Foundation.Interfaces;
 using FootballOracle.Foundation.ViewModels;
 using FootballOracle.Models.Entities;
@@ -9,9 +12,6 @@ using FootballOracle.Models.ViewModels.Approvable.Venues;
 using FootballOracle.Models.ViewModels.Base;
 using FootballOracle.Models.ViewModels.Standard;
 using FootballOracle.Models.ViewModels.Standard.Campaigns;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FootballOracle.Models.ViewModels.Approvable.Teams
 {
@@ -320,7 +320,9 @@ namespace FootballOracle.Models.ViewModels.Approvable.Teams
 
             var selectedCampaignViewModel = SetSelectedCampaign();
 
-            var resultMatchViewModels = selectedCampaignViewModel.ResultMatchViewModels
+            selectedCampaignViewModel.SetCampaignStages(3);
+
+            var resultMatchViewModels = selectedCampaignViewModel.SelectedCampaignStageViewModel.ResultMatchViewModels
                 .Where(w => w.Team1Guid == HeaderKey || w.Team2Guid == HeaderKey)
                 .OrderByDescending(o => o.MatchDate);
 
