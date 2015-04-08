@@ -140,14 +140,16 @@ namespace FootballOracle.Models.ViewModels.Standard.Campaigns
         {
             var personTableItemViewModels = new List<PersonTableItemViewModel>();
 
-            //var matchViewModels = campaignViewModel.Entity..MatchVs.Where(m => m.Team1Guid == teamGuid || m.Team2Guid == teamGuid).ToViewModels(viewDate);
+            campaignViewModel.SetCampaignStages(3);
 
-            //var matchEventViewModels = matchViewModels.Select(m => m.VersionEntity.MatchEvents.Where(me => me.TeamPrimaryKey == teamGuid).ToViewModels(viewDate));
+            var matchViewModels = campaignViewModel.SelectedCampaignStageViewModel.Entity.MatchVs.Where(m => m.Team1Guid == teamGuid || m.Team2Guid == teamGuid).ToViewModels(viewDate);
 
-            //foreach (var matchEventsViewModel in matchEventViewModels)
-            //    matchEventsViewModel._ForEach(me => personTableItemViewModels.UpdatePersonTableItemViewModels(me, viewDate));
+            var matchEventViewModels = matchViewModels.Select(m => m.VersionEntity.MatchEvents.Where(me => me.TeamPrimaryKey == teamGuid).ToViewModels(viewDate));
 
-            //personTableItemViewModels.Sort();
+            foreach (var matchEventsViewModel in matchEventViewModels)
+                matchEventsViewModel._ForEach(me => personTableItemViewModels.UpdatePersonTableItemViewModels(me, viewDate));
+
+            personTableItemViewModels.Sort();
             return personTableItemViewModels;
         }
 
